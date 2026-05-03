@@ -56,16 +56,32 @@ namespace MuszakBeosztasAPI.Services
             var beosztasLista = new List<BeosztasReszlet>();
             var hetiOrakDolgozonkent = dolgozok.ToDictionary(d => d.Id, d => 0);
 
-            // A Backtracking hívása
-            bool Sikerult = MegoldasKeresese(0, betoltendoSlotok, dolgozok, elerhetosegek, hetiOrakDolgozonkent, beosztasLista);
+            // 5 másodperces Biztonsági fék (Timeout)
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+            bool Sikerult = false;
+            try 
+            {
+                // A Backtracking hívása
+                Sikerult = MegoldasKeresese(0, betoltendoSlotok, dolgozok, elerhetosegek, hetiOrakDolgozonkent, beosztasLista, cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // A timeout megtörtént
+                Sikerult = false;
+            }
 
             if (Sikerult)
             {
                 ujBeosztas.Reszletek = beosztasLista;
+                ujBeosztas.Allapot = "Tervezet (Tökéletes)";
             }
             else
             {
-                throw new Exception("Nem sikerült érvényes beosztást generálni a megadott korlátok mellett. Az algoritmus visszalépett, de nem talált teljes lefedettséget.");
+                // Ha elhasal a tökéletes megoldás, átváltunk a Mohó (Greedy) Algoritmusra!
+                var greedyLista = GreedyBeosztas(betoltendoSlotok, dolgozok, elerhetosegek);
+                ujBeosztas.Reszletek = greedyLista;
+                ujBeosztas.Allapot = "Tervezet (Hiányos / Greedy)";
             }
 
             // Mentés Firestore-ba
@@ -83,8 +99,13 @@ namespace MuszakBeosztasAPI.Services
             List<Dolgozo> dolgozok, 
             List<Elerhetoseg> elerhetosegek, 
             Dictionary<string, int> hetiOrak, 
-            List<BeosztasReszlet> jelenlegiBeosztas)
+            List<BeosztasReszlet> jelenlegiBeosztas,
+            CancellationToken cancellationToken)
         {
+            // Kilépés, ha lejárt a beállított Timeout
+            if (cancellationToken.IsCancellationRequested)
+                return false;
+
             // Ha az összes slot be van töltve, megvan a megoldás!
             if (slotIndex >= slotok.Count)
                 return true;
@@ -114,7 +135,7 @@ namespace MuszakBeosztasAPI.Services
                     hetiOrak[dolgozo.Id] += muszakOrak;
 
                     // Rekurzív hívás a következő slotra
-                    if (MegoldasKeresese(slotIndex + 1, slotok, dolgozok, elerhetosegek, hetiOrak, jelenlegiBeosztas))
+                    if (MegoldasKeresese(slotIndex + 1, slotok, dolgozok, elerhetosegek, hetiOrak, jelenlegiBeosztas, cancellationToken))
                     {
                         return true; // Találtunk végleges megoldást mélyebben
                     }
@@ -127,6 +148,46 @@ namespace MuszakBeosztasAPI.Services
 
             // Ha egyetlen dolgozóval sem lehet betölteni ezt a slotot a jelenlegi konfiguráció mellett, visszalépünk.
             return false;
+        }
+
+        // Mohó (Greedy) Algoritmus vészhelyzetre
+        private List<BeosztasReszlet> GreedyBeosztas(
+            List<(Muszak muszak, string nap)> slotok, 
+            List<Dolgozo> dolgozok, 
+            List<Elerhetoseg> elerhetosegek)
+        {
+            var beosztasLista = new List<BeosztasReszlet>();
+            var hetiOrak = dolgozok.ToDictionary(d => d.Id, d => 0);
+
+            foreach (var slot in slotok)
+            {
+                var aktualisMuszak = slot.muszak;
+                
+                // Olyan dolgozókat próbálunk beosztani, akiknek a legkevesebb órájuk van a héten.
+                var rendezettDolgozok = dolgozok.OrderBy(d => hetiOrak[d.Id]).ToList();
+
+                foreach (var dolgozo in rendezettDolgozok)
+                {
+                    if (ValidE(dolgozo, slot.nap, aktualisMuszak, elerhetosegek, hetiOrak, beosztasLista))
+                    {
+                        var ujReszlet = new BeosztasReszlet
+                        {
+                            DolgozoId = dolgozo.Id,
+                            MuszakId = aktualisMuszak.Id,
+                            Nap = slot.nap
+                        };
+                        
+                        beosztasLista.Add(ujReszlet);
+                        
+                        int muszakOrak = SzamolOrakat(aktualisMuszak.Kezdes, aktualisMuszak.Befejezes);
+                        hetiOrak[dolgozo.Id] += muszakOrak;
+                        
+                        break; // Csak egy embert osztunk be erre a konkrét slot "helyre", majd megyünk a következő slotra.
+                    }
+                }
+            }
+
+            return beosztasLista;
         }
 
         // Hard Constraints ellenőrzése

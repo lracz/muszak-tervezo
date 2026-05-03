@@ -1,0 +1,17 @@
+# .NET build eredmények
+bin/
+obj/
+
+# IDE fájlok
+.vs/
+*.user
+*.suo
+
+# Firebase titkok 
+firebase-config.json
+
+# Node modules (React frontend)
+node_modules/
+
+# Környezeti változók
+.env

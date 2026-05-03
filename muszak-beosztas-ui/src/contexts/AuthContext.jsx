@@ -90,12 +90,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (nev, jelszo, szerepkor, pozicio, email) => {
+    const register = async (nev, jelszo, pozicio, email) => {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nev, jelszo, szerepkor, pozicio, email })
+                body: JSON.stringify({ nev, jelszo, pozicio, email })
             });
 
             if (response.ok) {

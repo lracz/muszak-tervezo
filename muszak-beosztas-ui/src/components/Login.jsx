@@ -13,7 +13,6 @@ const Login = () => {
     
     // Regisztráció exkluzív mezők
     const [email, setEmail] = useState('');
-    const [szerepkor, setSzerepkor] = useState('Dolgozo');
     const [pozicio, setPozicio] = useState('');
     
     const [error, setError] = useState('');
@@ -23,7 +22,7 @@ const Login = () => {
         setError('');
         
         if (isRegisterMode) {
-            const sikeres = await register(identifier, jelszo, szerepkor, pozicio, email);
+            const sikeres = await register(identifier, jelszo, pozicio, email);
             if (!sikeres) {
                 setError('Hiba a regisztráció során! Ellenőrizd az adatokat.');
             }
@@ -73,13 +72,6 @@ const Login = () => {
                                     onChange={(e) => setPozicio(e.target.value)} 
                                     placeholder="Pl: Eladó"
                                 />
-                            </div>
-                            <div className="form-group">
-                                <label>Szerepkör</label>
-                                <select value={szerepkor} onChange={(e) => setSzerepkor(e.target.value)} required>
-                                    <option value="Dolgozo">Dolgozó</option>
-                                    <option value="HR">HR Adminisztrátor</option>
-                                </select>
                             </div>
                         </>
                     )}

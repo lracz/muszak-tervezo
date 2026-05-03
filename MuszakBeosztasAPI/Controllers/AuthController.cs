@@ -159,7 +159,9 @@ namespace MuszakBeosztasAPI.Controllers
             {
                 Nev = request.Nev,
                 JelszoHash = BCrypt.Net.BCrypt.HashPassword(request.Jelszo),
-                Szerepkor = string.IsNullOrEmpty(request.Szerepkor) ? "Dolgozo" : request.Szerepkor,
+                // BIZTONSÁGI SZABÁLY: Regisztráció mindig "Dolgozo" szerepkört kap.
+                // HR jogosultságot csak egy meglévő HR admin tud adni a dolgozó szerkesztésen keresztül.
+                Szerepkor = "Dolgozo",
                 Pozicio = string.IsNullOrEmpty(request.Pozicio) ? "Új dolgozó" : request.Pozicio,
                 Email = request.Email ?? "",
                 MaxHetiOra = 40

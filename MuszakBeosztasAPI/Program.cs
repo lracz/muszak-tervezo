@@ -99,15 +99,20 @@ builder.Services.AddResponseCompression(beallitasok =>
 });
 
 // CORS beállítása - dinamikus originek a lokális és felhős futtatáshoz
-var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(",") 
+var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")
+    ?.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) 
     ?? new[] { "http://localhost:5173" };
+
+Console.WriteLine($"CORS engedélyezett originek: [{string.Join(", ", allowedOrigins)}]");
+
 builder.Services.AddCors(beallitasok =>
 {
     beallitasok.AddPolicy("ReactKliens", szabaly =>
     {
         szabaly.WithOrigins(allowedOrigins)
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 });
 

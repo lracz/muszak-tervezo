@@ -148,6 +148,12 @@ namespace MuszakBeosztasAPI.Controllers
                 return BadRequest(new { Message = "A név és a jelszó megadása kötelező!" });
             }
 
+            // Egyediség ellenőrzése (név vagy email alapján)
+            if (await _dolgozoService.FoglaltNevVagyEmail(request.Nev, request.Email))
+            {
+                return BadRequest(new { Message = "Ez a név vagy e-mail cím már foglalt! Kérlek, válassz másikat." });
+            }
+
             // Jelszó komplexitás validálás
             var passwordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$");
             if (!passwordRegex.IsMatch(request.Jelszo))

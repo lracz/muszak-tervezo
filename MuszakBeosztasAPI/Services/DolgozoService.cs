@@ -59,6 +59,24 @@ namespace MuszakBeosztasAPI.Services
             }
         }
 
+        // Keresés név vagy email alapján az egyediség ellenőrzéséhez
+        public async Task<bool> FoglaltNevVagyEmail(string nev, string? email)
+        {
+            try
+            {
+                var dolgozok = await OsszesLekerese();
+                return dolgozok.Any(d => 
+                    d.Nev.Equals(nev, StringComparison.OrdinalIgnoreCase) || 
+                    (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(d.Email) && d.Email.Equals(email, StringComparison.OrdinalIgnoreCase))
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Hiba az egyediség ellenőrzésekor: {ex.Message}");
+                throw;
+            }
+        }
+
         // Új dolgozó létrehozása
         public async Task<Dolgozo> Letrehozas(Dolgozo dolgozo)
         {

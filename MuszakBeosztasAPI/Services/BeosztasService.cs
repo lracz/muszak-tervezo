@@ -228,6 +228,19 @@ namespace MuszakBeosztasAPI.Services
                 }
             }
 
+
+            // 6. Pozíció (Munkakör) vizsgálata
+            bool isMuszakVegyes = string.IsNullOrEmpty(muszak.Pozicio) || muszak.Pozicio.Equals("Vegyes", StringComparison.OrdinalIgnoreCase);
+            bool isDolgozoVegyes = string.IsNullOrEmpty(dolgozo.Pozicio) || dolgozo.Pozicio.Equals("Vegyes", StringComparison.OrdinalIgnoreCase);
+
+            if (!isMuszakVegyes && !isDolgozoVegyes)
+            {
+                if (!muszak.Pozicio.Equals(dolgozo.Pozicio, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -268,6 +281,21 @@ namespace MuszakBeosztasAPI.Services
             if (!snapshot.Exists) return false;
 
             await docRef.UpdateAsync("Allapot", "Végleges");
+            return true;
+        }
+
+        public async Task<bool> ModositasMentese(string id, List<BeosztasReszlet> ujReszletek)
+        {
+            var docRef = _db.Collection("beosztasok").Document(id);
+            var snapshot = await docRef.GetSnapshotAsync();
+
+            if (!snapshot.Exists) return false;
+
+            await docRef.UpdateAsync(new Dictionary<string, object>
+            {
+                { "Reszletek", ujReszletek },
+                { "Allapot", "Tervezet (Manuálisan módosítva)" }
+            });
             return true;
         }
     }

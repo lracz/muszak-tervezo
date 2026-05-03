@@ -26,3 +26,16 @@ export async function beosztasVeglegesitese(id) {
   if (!valasz.ok) throw new Error("Hiba a beosztás véglegesítésekor");
   return await valasz.json();
 }
+
+// Manuálisan módosított beosztás mentése
+export async function beosztasModositasa(id, ujReszletek) {
+  const valasz = await fetch(`${API_URL}/${id}/modosit`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(ujReszletek)
+  });
+  if (!valasz.ok) throw new Error("Hiba a beosztás módosításakor");
+  return await valasz.json();
+}

@@ -70,5 +70,24 @@ namespace MuszakBeosztasAPI.Controllers
                 return StatusCode(500, $"Szerverhiba: {ex.Message}");
             }
         }
+
+        // PUT api/beosztas/{id}/modosit - Beosztás manuális módosítása
+        [HttpPut("{id}/modosit")]
+        public async Task<ActionResult> Modosit(string id, [FromBody] List<MuszakBeosztasAPI.Models.BeosztasReszlet> ujReszletek)
+        {
+            try
+            {
+                var sikerult = await _szolgaltatas.ModositasMentese(id, ujReszletek);
+
+                if (!sikerult)
+                    return NotFound("A beosztás nem található.");
+
+                return Ok(new { uzenet = "A beosztás sikeresen módosítva." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Szerverhiba: {ex.Message}");
+            }
+        }
     }
 }

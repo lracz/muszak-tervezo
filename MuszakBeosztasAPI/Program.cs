@@ -131,12 +131,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else
-{
-    // HSTS és HTTPS kikényszerítése csak Production környezetben
-    app.UseHsts();
-    app.UseHttpsRedirection();
-}
+// Megjegyzés: HSTS és HTTPS redirect nem szükséges, mert a felhős platformok
+// (Render, Cloud Run, Vercel) az SSL/TLS titkosítást a load balancer szintjén kezelik.
 
 // Middleware-ek – CORS MINDIG ELŐSZÖR, hogy a preflight kérések működjenek
 app.UseCors("ReactKliens");

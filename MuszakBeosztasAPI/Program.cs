@@ -133,17 +133,15 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    // HSTS bekapcsolása Production környezetben
+    // HSTS és HTTPS kikényszerítése csak Production környezetben
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
 
-// HTTPS kikényszerítése
-app.UseHttpsRedirection();
-
-// Middleware-ek
+// Middleware-ek – CORS MINDIG ELŐSZÖR, hogy a preflight kérések működjenek
+app.UseCors("ReactKliens");
 app.UseMiddleware<GlobalExceptionHandler>();
 app.UseResponseCompression();
-app.UseCors("ReactKliens");
 
 app.UseAuthentication();
 app.UseAuthorization();

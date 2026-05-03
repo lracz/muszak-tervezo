@@ -29,10 +29,12 @@ namespace MuszakBeosztasAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
             var dolgozok = await _dolgozoService.OsszesLekerese();
-            // A könnyebb belépés miatt Név vagy ID alapján is megkeressük
+            // A könnyebb belépés miatt Név, Email vagy ID alapján is megkeressük
             var user = dolgozok.FirstOrDefault(d => 
                 d.Id == request.Identifier || 
-                d.Nev.Equals(request.Identifier, StringComparison.OrdinalIgnoreCase));
+                d.Nev.Equals(request.Identifier, StringComparison.OrdinalIgnoreCase) ||
+                (!string.IsNullOrEmpty(d.Email) && d.Email.Equals(request.Identifier, StringComparison.OrdinalIgnoreCase)));
+
 
             if (user == null)
             {

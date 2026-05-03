@@ -44,3 +44,27 @@ Mivel az adatbázis (Firestore) a Google felhőjében fut, logikus a backendet a
 4. **Fontos:** A Google Cloud Run környezetben a szolgáltató automatikusan integrálja a Firestore hitelesítést (Service Account), ha ugyanazon a GCP projekten futnak, így még `firebase-config.json` fájlt sem kell bajlódva beinjektálni a konténerbe!
 
 *(Alternatíva: Azure App Service Container futtatás, ahol a Registryből húzzuk be az image-t.)*
+
+## 4. Zero-Trust Networking (Cloudflare Tunnel)
+
+Ha nem szeretnél külső felhőszolgáltatókra (Google, Vercel) támaszkodni, hanem a **saját otthoni szervereden (vagy Raspberry Pi-don)** futtatnád a projektet, és szeretnéd biztonságosan, publikusan elérhetővé tenni a weben, a **Cloudflare Tunnel (cloudflared)** a legprofibb megoldás (Sprint 10).
+
+**Miért kiváló választás?**
+- **Nincs Port Forwarding:** Nem kell beállítani a routeredet, és működik szigorú hálózatokon (pl. egyetemi kollégium, CGNAT) is.
+- **Zero-Trust Biztonság:** Senki nem látja az otthoni szervered igazi IP címét. A forgalom a Cloudflare szerverein folyik keresztül, így azonnali DDoS védelmet kapsz.
+- **Ingyenes SSL/TLS:** A Cloudflare automatikusan biztosít neked HTTPS tanúsítványt a saját domainedhez (pl. `muszak.sajatneved.hu`).
+
+**Beállítás lépései (Docker-Compose sidecar):**
+1. Regisztrálj a Cloudflare Zero Trust dashboardon, és hozz létre egy új Tunnel-t.
+2. A Dashboard adni fog egy titkos tokent (pl. `eyJh...`).
+3. Add hozzá a `cloudflared` szolgáltatást a `docker-compose.yml` fájlod végéhez:
+```yaml
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=IDE_MASOLD_BE_A_TITKOS_TOKENEDET
+    restart: unless-stopped
+```
+4. A Cloudflare Dashboardon állítsd be a **Public Hostname** fülön, hogy a domained mutasson a Docker konténer belső hálózatára (pl. `http://frontend:80` vagy ahol a React fut).
+5. Indítsd el a konténereket a `docker-compose up -d` paranccsal, és a rendszered biztonságosan kikerül a világhálóra!

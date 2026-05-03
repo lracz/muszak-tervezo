@@ -22,8 +22,35 @@ Egy webes alkalmazás, amely segíti a munkáltatókat a dolgozók műszakbeoszt
 - **Frontend:** React 19, Vite
 - **Adatbázis:** Firebase Firestore (NoSQL)
 - **Algoritmus:** Constraint Satisfaction Problem (CSP) Visszalépéses algoritmussal (NP-nehéz megoldó)
-- **Infrastruktúra:** Docker, Docker Compose
+- **Infrastruktúra:** Docker, Docker Compose, Cloudflare Tunnel
 - **Tesztelés:** xUnit, Moq (TDD szemlélet)
+
+## 🏗️ Biztonsági és Rendszer Architektúra
+
+A rendszer háromrétegű mikroszolgáltatás-architektúrával és magas szintű védelmi mechanizmusokkal rendelkezik (Rate Limiting, Refresh Tokenek, BCrypt).
+
+```mermaid
+sequenceDiagram
+    participant U as Felhasználó
+    participant F as React Frontend (Nginx)
+    participant B as .NET Backend API
+    participant DB as Firestore DB (NoSQL)
+
+    U->>F: Név + jelszó
+    F->>B: POST /api/auth/login (Rate Limited)
+    B->>DB: Dolgozó lekérdezése
+    DB-->>B: Dolgozó adatok (JelszoHash)
+    B->>B: BCrypt.Verify(jelszó, JelszoHash)
+    B-->>F: JWT (15 perc) + Refresh Token (7 nap)
+    F->>B: API kérés + Authorization: Bearer {jwt_token}
+    B->>B: Token validáció (RBAC)
+    B-->>F: API válasz / 401 Unauthorized
+    
+    Note over F, B: Amikor a JWT lejár
+    F->>B: POST /api/auth/refresh { Refresh Token }
+    B->>DB: Refresh token ellenőrzése
+    B-->>F: Új JWT + Új Refresh Token
+```
 
 ## 🐳 Docker Futtatás (Új!)
 A projekt mikroszolgáltatás-alapú konténerizált futtatásra is fel van készítve. Csak telepített Docker szükséges:
@@ -43,6 +70,7 @@ A frontend az `http://localhost:5173`, a backend a `http://localhost:8080` címe
 - [x] Sprint 7: NP-nehéz probléma megoldó (Backtracking CSP), Dockerizáció és felhős telepítési tervek.
 - [x] Sprint 8: Szerepkör-alapú hitelesítés (JWT Auth), **BCrypt iparági jelszó-hashelés**, Teljes Regisztrációs felület (UI) és Adat-export (iCal Naptár szinkronizáció, CSV Excel).
 - [x] Sprint 9: Vállalati szintű biztonság (Rate Limiting, Refresh Tokenek, Jelszó komplexitás, HSTS).
+- [x] Sprint 10: Zero-Trust Networking (Cloudflare Tunnel) élesítési tervek.
 
 ---
 
@@ -244,6 +272,42 @@ A webalkalmazás elérhető lesz: `http://localhost:5173`
 - Projekt dokumentáció véglegesítés (README, architektúra, módszertan)
 - Munkanapló lezárás
 - Utánkövetési terv és jövőbeli fejlesztési irányok dokumentálása
+
+### ✅ Sprint 7 – Haladó Algoritmus és Docker
+- Constraint Satisfaction Problem (CSP) Backtracking algoritmus a műszak kiosztására.
+- Kemény és puha megkötések (Hard & Soft Constraints) bevezetése (Max óra, Pihenőidő).
+- `docker-compose.yml` és `Dockerfile`-ok elkészítése a teljes rendszer mikroszolgáltatás-alapú indításához.
+- Felhős élesítési (Deployment) stratégia elkészítése.
+
+### ✅ Sprint 8 – Biztonságos Hitelesítés és Export
+- Szerepkör alapú hozzáférés-vezérlés (HR vs. Dolgozó) bevezetése `AuthContext`-el.
+- Adatbázisba mentett jelszavak iparági sztenderd **BCrypt** hashelése.
+- `.ics` kiterjesztésű személyes naptárexportálás készítése a dolgozóknak.
+- Heti beosztások HR számára letölthetővé tétele CSV (Excel) formátumban.
+
+### ✅ Sprint 9 – Enterprise Security
+- IP alapú Rate Limiting beállítása Brute-Force támadások ellen (max 5 próbálkozás / perc).
+- Szigorú jelszó komplexitás validálása.
+- JWT Access Token élettartamának 15 percre csökkentése.
+- Refresh Tokenek (7 napos) generálása és tárolása Firestore-ban.
+- Tokenek transzparens, háttérbeli megújítása React frontend segítségével.
+- HSTS és HTTP->HTTPS Redirection.
+
+### ✅ Sprint 10 – Zero-Trust Networking
+- Otthoni/Egyetemi szerver alapú élesítés előkészítése.
+- Cloudflare Tunnel (cloudflared) beállítása port-forwarding nélküli, HTTPS titkosított internetes eléréshez.
+- Sidecar konténer hozzáadása a deployment dokumentációhoz.
+
+---
+
+## 🗄️ Adatbázis Architektúra (Firestore NoSQL)
+
+A rendszer szerver nélküli, dokumentum-alapú adatbázist használ (Google Firebase Firestore). Fő gyűjtemények (Collections):
+
+1. **`dolgozok`**: Minden munkavállaló egy dokumentum. Tartalmazza a nevet, elérhetőségeket, HR/Dolgozo szerepkört, a BCrypt jelszó hash-t, valamint a titkosított `RefreshToken`-t a megújításhoz.
+2. **`muszakok`**: A lehetséges műszaktípusokat (pl. Reggel, Délután) írja le (kezdet, vég, szükséges létszám).
+3. **`elerhetosegek`**: A dolgozók által megadott preferenciák: mikor érnek rá és mikor nem, amelyet az algoritmus Constraint-ként (megkötés) kezel.
+4. **`beosztasok`**: Egy adott hétre generált (és később véglegesített) műszak-dolgozó párosításokat tárolja alárendelt gyűjteményekkel (`reszletek`).
 
 ---
 

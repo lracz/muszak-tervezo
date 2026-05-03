@@ -1,7 +1,7 @@
 // Alkalmazás belépési pont
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./style.css";
+// A fő stílusokat az App.css és Login.css tartalmazza
 import App from "./App.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 

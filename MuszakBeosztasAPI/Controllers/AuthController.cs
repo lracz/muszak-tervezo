@@ -107,7 +107,10 @@ namespace MuszakBeosztasAPI.Controllers
         private string GenerateJwtToken(Dolgozo user, string role)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
-            var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "NagyonTitkosKulcs1234567890NagyonTitkosKulcs");
+            var key = Encoding.UTF8.GetBytes(
+                Environment.GetEnvironmentVariable("JWT_SECRET_KEY") 
+                ?? jwtSettings["Key"] 
+                ?? "NagyonTitkosKulcs1234567890NagyonTitkosKulcs");
 
             var claims = new[]
             {

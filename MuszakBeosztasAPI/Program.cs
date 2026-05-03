@@ -12,13 +12,29 @@ using Microsoft.AspNetCore.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 
 // Firestore beállítása
-// A GOOGLE_APPLICATION_CREDENTIALS környezeti változóra van szükség,
-// amely a firebase-config.json fájlra mutat
-var firebaseKonfigUtvonal = Path.Combine(Directory.GetCurrentDirectory(), "firebase-config.json");
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", firebaseKonfigUtvonal);
+// Cloud környezetben a GOOGLE_CREDENTIALS_JSON env varból olvassuk a service account JSON-t,
+// lokálisan a firebase-config.json fájlból.
+var credentialsJson = Environment.GetEnvironmentVariable("GOOGLE_CREDENTIALS_JSON");
+if (!string.IsNullOrEmpty(credentialsJson))
+{
+    // Felhőben: a JSON stringet ideiglenes fájlba mentjük és arra mutatunk
+    var tempPath = Path.Combine(Path.GetTempPath(), "firebase-config.json");
+    File.WriteAllText(tempPath, credentialsJson);
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", tempPath);
+    Console.WriteLine("Firebase: Credentials loaded from GOOGLE_CREDENTIALS_JSON environment variable.");
+}
+else
+{
+    // Lokálisan: a projekt mappából
+    var firebaseKonfigUtvonal = Path.Combine(Directory.GetCurrentDirectory(), "firebase-config.json");
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", firebaseKonfigUtvonal);
+    Console.WriteLine("Firebase: Credentials loaded from firebase-config.json file.");
+}
 
 // A projekt azonosítót a firebase-config.json fájlból olvassa ki automatikusan
-var projektAzonosito = builder.Configuration["Firebase:ProjektAzonosito"] ?? "muszak-beosztas";
+var projektAzonosito = builder.Configuration["Firebase:ProjektAzonosito"] 
+    ?? Environment.GetEnvironmentVariable("FIREBASE_PROJECT_ID") 
+    ?? "muszak-tervezo";
 var firestoreDb = FirestoreDb.Create(projektAzonosito);
 
 // Szolgáltatások regisztrálása
@@ -29,7 +45,9 @@ builder.Services.AddScoped<ElerhetosegService>();
 builder.Services.AddScoped<BeosztasService>();
 
 // JWT Konfiguráció
-var jwtKey = builder.Configuration["Jwt:Key"] ?? "NagyonTitkosKulcs1234567890NagyonTitkosKulcs";
+var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") 
+    ?? builder.Configuration["Jwt:Key"] 
+    ?? "NagyonTitkosKulcs1234567890NagyonTitkosKulcs";
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -80,12 +98,14 @@ builder.Services.AddResponseCompression(beallitasok =>
     beallitasok.EnableForHttps = true;
 });
 
-// CORS beállítása - a React kliens elérhesse az API-t
+// CORS beállítása - dinamikus originek a lokális és felhős futtatáshoz
+var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(",") 
+    ?? new[] { "http://localhost:5173" };
 builder.Services.AddCors(beallitasok =>
 {
     beallitasok.AddPolicy("ReactKliens", szabaly =>
     {
-        szabaly.WithOrigins("http://localhost:5173")
+        szabaly.WithOrigins(allowedOrigins)
                .AllowAnyHeader()
                .AllowAnyMethod();
     });

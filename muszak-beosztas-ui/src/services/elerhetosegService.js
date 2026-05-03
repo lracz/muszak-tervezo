@@ -1,5 +1,5 @@
 // API szolgáltatás az elérhetőségek kezelésére
-const API_URL = "http://localhost:5148/api/elerhetoseg";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/elerhetoseg`;
 
 // Összes elérhetőség lekérdezése
 export async function elerhetosegekLekerdezese() {

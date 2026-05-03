@@ -1,5 +1,5 @@
 // API szolgáltatás a műszakok kezelésére
-const API_URL = "http://localhost:5148/api/muszak";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/muszak`;
 
 // Összes műszak lekérdezése
 export async function muszakokLekerdezese() {

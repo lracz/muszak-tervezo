@@ -1,5 +1,5 @@
 // API szolgáltatás a dolgozók kezelésére
-const API_URL = "http://localhost:5148/api/dolgozo";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/dolgozo`;
 
 // Összes dolgozó lekérdezése
 export async function dolgozokLekerdezese() {

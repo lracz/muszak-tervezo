@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         if (!refreshToken || !user) return;
 
         try {
-            const response = await fetch('http://localhost:5148/api/auth/refresh', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/refresh`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: user.id, refreshToken: refreshToken })
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (identifier, jelszo) => {
         try {
-            const response = await fetch('http://localhost:5148/api/auth/login', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ identifier, jelszo })
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (nev, jelszo, szerepkor, pozicio, email) => {
         try {
-            const response = await fetch('http://localhost:5148/api/auth/register', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nev, jelszo, szerepkor, pozicio, email })

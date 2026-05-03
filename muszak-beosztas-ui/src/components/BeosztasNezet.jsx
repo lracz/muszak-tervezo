@@ -63,12 +63,12 @@ function BeosztasNezet({ dolgozok, muszakok }) {
   };
 
   const handleExportCSV = () => {
-    window.location.href = `http://localhost:5148/api/export/csv/${het}`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/export/csv/${het}`;
   };
 
   const handleExportICal = () => {
     if (user?.id) {
-      window.location.href = `http://localhost:5148/api/export/ical/${het}/${user.id}`;
+      window.location.href = `${import.meta.env.VITE_API_URL}/api/export/ical/${het}/${user.id}`;
     }
   };
 

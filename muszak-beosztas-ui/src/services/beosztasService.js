@@ -1,5 +1,5 @@
 // API szolgáltatás a beosztások kezelésére
-const API_URL = "http://localhost:5148/api/beosztas";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/beosztas`;
 
 // Beosztás generálása az adott hétre
 export async function beosztasGeneralasa(het) {

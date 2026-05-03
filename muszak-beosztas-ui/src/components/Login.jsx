@@ -16,21 +16,27 @@ const Login = () => {
     const [pozicio, setPozicio] = useState('');
     
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
         
-        if (isRegisterMode) {
-            const sikeres = await register(identifier, jelszo, pozicio, email);
-            if (!sikeres) {
-                setError('Hiba a regisztráció során! Ellenőrizd az adatokat.');
+        try {
+            if (isRegisterMode) {
+                const sikeres = await register(identifier, jelszo, pozicio, email);
+                if (!sikeres) {
+                    setError('Hiba a regisztráció során! Ellenőrizd az adatokat.');
+                }
+            } else {
+                const sikeres = await login(identifier, jelszo);
+                if (!sikeres) {
+                    setError('Hibás bejelentkezési adatok! (Ha csak frissítetted a rendszert, regisztrálj egy új fiókot)');
+                }
             }
-        } else {
-            const sikeres = await login(identifier, jelszo);
-            if (!sikeres) {
-                setError('Hibás bejelentkezési adatok! (Ha csak frissítetted a rendszert, regisztrálj egy új fiókot)');
-            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -86,8 +92,12 @@ const Login = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn-primary">
-                        {isRegisterMode ? 'Regisztráció' : 'Bejelentkezés'}
+                    <button type="submit" className="btn-primary" disabled={isLoading}>
+                        {isLoading ? (
+                            <span><span className="spinner">⏳</span> Kérlek várj...</span>
+                        ) : (
+                            isRegisterMode ? 'Regisztráció' : 'Bejelentkezés'
+                        )}
                     </button>
                 </form>
                 

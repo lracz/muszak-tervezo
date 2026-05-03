@@ -195,9 +195,9 @@ namespace MuszakBeosztasAPI.Controllers
     {
         public string Nev { get; set; }
         public string Jelszo { get; set; }
-        public string Szerepkor { get; set; } // HR vagy Dolgozo
-        public string Pozicio { get; set; }
-        public string Email { get; set; }
+        public string? Szerepkor { get; set; } // HR vagy Dolgozo (már nem kérjük be, default lesz)
+        public string? Pozicio { get; set; }
+        public string? Email { get; set; }
     }
 
     public class RefreshTokenDto

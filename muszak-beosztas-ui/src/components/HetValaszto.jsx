@@ -33,19 +33,12 @@ function HetValaszto({ het, hetValtozas }) {
 
   return (
     <div className="het-valaszto">
-      <button className="btn-het-nav" onClick={() => hetLeptetes(-1)} title="Előző hét">
-        ◀
-      </button>
+      <button className="btn-het-nav hover-lift" onClick={() => hetLeptetes(-1)} title="Előző hét">◀</button>
       <div className="het-kijelzo">
-        <span className="het-cimke">📅 Hét</span>
         <span className="het-ertek">{aktualiso}</span>
       </div>
-      <button className="btn-het-nav" onClick={() => hetLeptetes(1)} title="Következő hét">
-        ▶
-      </button>
-      <button className="btn-ma" onClick={() => hetValtozas(aktHetSzamitas())} title="Aktuális hét">
-        Ma
-      </button>
+      <button className="btn-het-nav hover-lift" onClick={() => hetLeptetes(1)} title="Következő hét">▶</button>
+      <button className="btn-ma hover-lift" onClick={() => hetValtozas(aktHetSzamitas())} title="Aktuális hét">Ma</button>
     </div>
   );
 }

@@ -69,11 +69,14 @@ function ElerhetosegKezelo({ dolgozok }) {
     return dolgozo ? dolgozo.nev : id;
   };
 
-  // Szabadság kvóta számítása (Mock - a valóságban éves szinten naptári dátumok alapján menne)
+  // Szabadság kvóta számítása (A 2 kötelező heti pihenőnap nem számít bele)
   const MAX_SZABADSAG = 20;
-  const felhasznaltSzabadsag = elerhetosegek.filter(
+  const osszesBejeloltSzabadsag = elerhetosegek.filter(
     e => (!isHR ? e.dolgozoId === user?.id : e.dolgozoId === kivalasztottDolgozo) && !e.elerheto
   ).length;
+  
+  // Csak a 2 nap feletti rész vonódik le az éves keretből
+  const felhasznaltSzabadsag = Math.max(0, osszesBejeloltSzabadsag - 2);
 
   const megjelenitettElerhetosegek = isHR 
     ? elerhetosegek 
@@ -88,13 +91,19 @@ function ElerhetosegKezelo({ dolgozok }) {
         {/* Szabadság egyenleg indikátor */}
         {kivalasztottDolgozo && (
           <div style={{
-            backgroundColor: '#f8f9fa', border: '1px solid #ddd', padding: '10px 15px', 
-            borderRadius: '8px', marginBottom: '15px', display: 'flex', justifyContent: 'space-between'
+            backgroundColor: '#f0f9ff', border: '1px solid #bae6fd', padding: '15px', 
+            borderRadius: '12px', marginBottom: '15px', display: 'flex', flexDirection: 'column', gap: '5px'
           }}>
-            <strong>Éves Szabadság Keret:</strong>
-            <span style={{ color: felhasznaltSzabadsag > MAX_SZABADSAG ? 'red' : 'green', fontWeight: 'bold' }}>
-              {felhasznaltSzabadsag} / {MAX_SZABADSAG} nap
-            </span>
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+              <strong style={{color:'#0369a1'}}>Éves Szabadság Keret:</strong>
+              <span style={{ 
+                fontSize: '1.2rem',
+                color: felhasznaltSzabadsag > MAX_SZABADSAG ? '#ef4444' : '#10b981', 
+                fontWeight: '800' 
+              }}>
+                {felhasznaltSzabadsag} / {MAX_SZABADSAG} nap
+              </span>
+            </div>
           </div>
         )}
 
@@ -144,7 +153,11 @@ function ElerhetosegKezelo({ dolgozok }) {
       <div className="lista-container">
         <h2>📋 {isHR ? "Összes beállított elérhetőség" : "Saját leadott igényeim"} ({megjelenitettElerhetosegek.length} db)</h2>
         {betoltes ? (
-          <p className="betoltes">⏳ Betöltés...</p>
+          <div style={{display:'flex', flexDirection:'column', gap:'10px'}}>
+            <div className="skeleton" style={{height:'40px'}}></div>
+            <div className="skeleton" style={{height:'40px'}}></div>
+            <div className="skeleton" style={{height:'40px'}}></div>
+          </div>
         ) : megjelenitettElerhetosegek.length === 0 ? (
           <p className="ures-lista-szoveg">Még nincs leadott igény.</p>
         ) : (

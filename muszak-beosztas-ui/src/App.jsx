@@ -6,6 +6,8 @@ import MuszakForm from "./components/MuszakForm";
 import MuszakLista from "./components/MuszakLista";
 import ElerhetosegKezelo from "./components/ElerhetosegKezelo";
 import BeosztasNezet from "./components/BeosztasNezet";
+import SzabadsagKezelo from "./components/SzabadsagKezelo";
+import CsereKezelo from "./components/CsereKezelo";
 import {
   dolgozokLekerdezese,
   dolgozoLetrehozasa,
@@ -22,6 +24,19 @@ import "./App.css";
 
 function App() {
   const { token, user, isHR, logout } = useContext(AuthContext);
+
+  // Sötét mód kezelése
+  const [isDark, setIsDark] = useState(localStorage.getItem("theme") === "dark");
+
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.add("dark-theme");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.classList.remove("dark-theme");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
 
   // Aktív tab kezelése
   const [aktivTab, setAktivTab] = useState("beosztas"); // Alapértelmezett legyen a beosztás
@@ -124,6 +139,8 @@ function App() {
     tabok.push({ id: "muszakok", cimke: "🏭 Műszakok", ikon: "🏭" });
   }
   tabok.push({ id: "elerhetoseg", cimke: "📅 Elérhetőség", ikon: "📅" });
+  tabok.push({ id: "szabadsag", cimke: "🏖️ Szabadság", ikon: "🏖️" });
+  tabok.push({ id: "csere", cimke: "🔄 Műszakcsere", ikon: "🔄" });
   tabok.push({ id: "beosztas", cimke: "📊 Beosztás", ikon: "📊" });
 
   // Aktív tab tartalma
@@ -145,6 +162,10 @@ function App() {
         );
       case "elerhetoseg":
         return <ElerhetosegKezelo dolgozok={dolgozok} />;
+      case "szabadsag":
+        return <SzabadsagKezelo />;
+      case "csere":
+        return <CsereKezelo />;
       case "beosztas":
         return <BeosztasNezet dolgozok={dolgozok} muszakok={muszakok} />;
       default:
@@ -158,14 +179,19 @@ function App() {
 
   return (
     <div className="app">
-      <header className="fejlec" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <header className="fejlec">
         <div>
           <h1>🗓️ Műszak Beosztás Tervező</h1>
           <p>Üdvözöllek, {user?.nev} ({user?.szerepkor})</p>
         </div>
-        <button onClick={logout} className="btn-secondary" style={{ padding: '0.5rem 1rem' }}>
-          Kijelentkezés
-        </button>
+        <div className="header-actions">
+          <button onClick={() => setIsDark(!isDark)} className="btn-secondary">
+            {isDark ? "☀️ Világos mód" : "🌙 Sötét mód"}
+          </button>
+          <button onClick={logout} className="btn-secondary">
+            🚪 Kijelentkezés
+          </button>
+        </div>
       </header>
 
       {/* Tab navigáció */}

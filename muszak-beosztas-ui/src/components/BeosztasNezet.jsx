@@ -6,8 +6,9 @@ import HetValaszto from "./HetValaszto";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 function BeosztasNezet({ dolgozok, muszakok }) {
-  const { user, isHR } = useContext(AuthContext);
+  const { user, token, isHR } = useContext(AuthContext);
   
+  const [csereModal, setCsereModal] = useState(null); // { nap, muszakId, kezdemenyezoId }
   const [het, setHet] = useState(() => {
     const ma = new Date();
     const evKezdete = new Date(ma.getFullYear(), 0, 1);
@@ -162,14 +163,25 @@ function BeosztasNezet({ dolgozok, muszakok }) {
     const szuksegesSlots = muszakok.reduce((acc, m) => acc + m.szuksegesLetszam, 0);
     const filledSlots = localReszletek.length;
     
+    // Bérköltség számítás
+    let osszesKoltseg = 0;
+    localReszletek.forEach(r => {
+      const d = dolgozoMap[r.dolgozoId];
+      const m = muszakok.find(m => m.id === r.muszakId);
+      if (d && m) {
+        osszesKoltseg += muszakOrak(m) * (d.oraber || 2500);
+      }
+    });
+    
     return {
       szuksegesOra,
       elerhetoOra,
       hianyOra: szuksegesOra - elerhetoOra,
       uresSlotok: szuksegesSlots - filledSlots,
-      tultermeles: elerhetoOra > szuksegesOra * 1.3
+      tultermeles: elerhetoOra > szuksegesOra * 1.3,
+      osszesKoltseg
     };
-  }, [muszakok, dolgozok, localReszletek, isHR]);
+  }, [muszakok, dolgozok, localReszletek, isHR, dolgozoMap]);
 
   const rendezettKvota = useMemo(() => {
     const arr = [...kvotaAdatok];
@@ -252,76 +264,72 @@ function BeosztasNezet({ dolgozok, muszakok }) {
 
   return (
     <div className="beosztas-container">
-      <div className="beosztas-fejlec">
-        <div>
-          <h2>📅 Heti Beosztás Tervező</h2>
-          <p className="het-ertek">{het}</p>
+      <div className="beosztas-fejlec" style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'20px'}}>
+        <div className="beosztas-cim">
+          <h2 style={{display:'flex', alignItems:'center', gap:'10px', margin:0}}>
+            🗓️ Heti Beosztás Tervező
+          </h2>
         </div>
 
         {isHR && kapacitasInfo && (
-          <div className="kapacitas-panel" style={{
-            padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0',
-            backgroundColor: '#fff', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', display: 'flex', gap: '20px'
-          }}>
-            <div style={{textAlign:'center'}}>
-              <div style={{fontSize:'0.7rem', color:'#64748b', fontWeight:'700'}}>LEFEDETTSÉG</div>
-              <div style={{fontSize:'1.2rem', fontWeight:'800', color: kapacitasInfo.uresSlotok > 0 ? '#ef4444' : '#10b981'}}>
-                {kapacitasInfo.uresSlotok === 0 ? '✅ 100%' : `⚠️ ${kapacitasInfo.uresSlotok} üres hely`}
+          <div className="kapacitas-panel" style={{marginBottom:0, padding:'10px 20px'}}>
+            <div className="kapacitas-box">
+              <div className="kapacitas-cimke">LEFEDETTSÉG</div>
+              <div className="kapacitas-ertek" style={{fontSize:'1rem', color: kapacitasInfo.uresSlotok > 0 ? '#ef4444' : '#10b981'}}>
+                {kapacitasInfo.uresSlotok === 0 ? '✅ 100%' : `⚠️ ${kapacitasInfo.uresSlotok} hely`}
               </div>
             </div>
-            <div style={{borderLeft:'1px solid #eee', paddingLeft:'20px'}}>
-              <div style={{fontSize:'0.7rem', color:'#64748b', fontWeight:'700'}}>MUNKAERŐ IGÉNY</div>
-              <div style={{fontSize:'1.1rem', fontWeight:'700'}}>
-                {kapacitasInfo.hianyOra > 0 ? (
-                  <span style={{color:'#ef4444'}}>🛑 Hiány: {kapacitasInfo.hianyOra} óra</span>
-                ) : kapacitasInfo.tultermeles ? (
-                  <span style={{color:'#f59e0b'}}>📢 Túl sok dolgozó</span>
-                ) : (
-                  <span style={{color:'#10b981'}}>💎 Optimális</span>
-                )}
+            <div className="kapacitas-box">
+              <div className="kapacitas-cimke">IGÉNY</div>
+              <div className="kapacitas-ertek" style={{fontSize:'1rem'}}>
+                {kapacitasInfo.hianyOra > 0 ? <span style={{color:'#ef4444'}}>🛑 Hiány</span> : kapacitasInfo.tultermeles ? <span style={{color:'#f59e0b'}}>📢 Túl sok</span> : <span style={{color:'#10b981'}}>💎 Optimális</span>}
               </div>
-              <div style={{fontSize:'0.7rem', color:'#94a3b8'}}>{kapacitasInfo.szuksegesOra}h szükséges / {kapacitasInfo.elerhetoOra}h kapacitás</div>
             </div>
-            {kapacitasInfo.hianyOra > 0 && (
-              <div style={{display:'flex', alignItems:'center', color:'#ef4444', fontSize:'0.8rem', maxWidth:'150px', fontWeight:'600'}}>
-                Javaslat: Vegyen fel +{Math.ceil(kapacitasInfo.hianyOra / 40)} embert!
+            <div className="kapacitas-box">
+              <div className="kapacitas-cimke">KÖLTSÉG</div>
+              <div className="kapacitas-ertek" style={{fontSize:'1rem', color: '#4f46e5'}}>
+                {new Intl.NumberFormat('hu-HU', { style: 'currency', currency: 'HUF', maximumFractionDigits: 0 }).format(kapacitasInfo.osszesKoltseg)}
               </div>
-            )}
+            </div>
             {kapacitasInfo.tultermeles && (
-              <div style={{display:'flex', alignItems:'center', color:'#f59e0b', fontSize:'0.8rem', maxWidth:'150px', fontWeight:'600'}}>
-                Javaslat: Csökkentse a létszámot vagy a műszakokat!
+              <div className="javaslat-box" style={{color:'#f59e0b', fontSize:'0.75rem', borderLeft:'1px solid #eee', paddingLeft:'15px'}}>
+                ⚠️ Csökkentse a létszámot!
               </div>
             )}
           </div>
         )}
+      </div>
 
+      <div className="beosztas-toolbar-container" style={{marginBottom:'20px'}}>
         <div className="beosztas-gombok">
           <HetValaszto het={het} hetValtozas={setHet} />
-          {beosztas && (
-            <>
-              <button className="btn-secondary" onClick={handleExportCSV}>📊 CSV</button>
-              <button className="btn-secondary" onClick={handleExportICal}>📅 iCal</button>
-            </>
-          )}
-          {isHR && (
-            <>
-              <button className={`btn-secondary ${sidebarNyitva ? 'active' : ''}`} onClick={() => setSidebarNyitva(!sidebarNyitva)}>
-                👥 {sidebarNyitva ? "Kvóta elrejtése" : "Dolgozói kvóta"}
-              </button>
-              <button className="btn-general" onClick={beosztasGeneralasKezelese} disabled={generalas || vanModositas}>
-                {generalas ? "⏳ Generálás..." : "⚡ Új Generálás"}
-              </button>
-              {vanModositas && (
-                <button className="btn-mentes" onClick={modositasMentese} disabled={mentesFolyamatban}
-                  style={{backgroundColor:'#28a745',color:'white',fontWeight:'bold'}}>
-                  {mentesFolyamatban ? "⏳ Mentés..." : "💾 Mentés"}
+          
+          <div style={{display:'flex', gap:'10px', marginLeft:'20px', borderLeft:'1px solid #ddd', paddingLeft:'20px'}}>
+            {beosztas && (
+              <>
+                <button className="btn-secondary hover-lift" onClick={handleExportCSV}>📊 CSV</button>
+                <button className="btn-secondary hover-lift" onClick={handleExportICal}>📅 iCal</button>
+              </>
+            )}
+            {isHR && (
+              <>
+                <button className={`btn-secondary hover-lift ${sidebarNyitva ? 'active' : ''}`} onClick={() => setSidebarNyitva(!sidebarNyitva)}>
+                  {sidebarNyitva ? "🙈 Kvóta" : "👥 Kvóta"}
                 </button>
-              )}
-              {beosztas && beosztas.allapot !== "Végleges" && !vanModositas && (
-                <button className="btn-veglegesit" onClick={veglegesitesKezelese}>📢 Publikálás</button>
-              )}
-            </>
-          )}
+                <button className="btn-general hover-lift" onClick={beosztasGeneralasKezelese} disabled={generalas || vanModositas}>
+                  {generalas ? "⏳ ..." : "⚡ Generálás"}
+                </button>
+                {vanModositas && (
+                  <button className="btn-mentes hover-lift" onClick={modositasMentese} disabled={mentesFolyamatban}>
+                    {mentesFolyamatban ? "⏳ ..." : "💾 Mentés"}
+                  </button>
+                )}
+                {beosztas && beosztas.allapot !== "Végleges" && !vanModositas && (
+                  <button className="btn-veglegesit hover-lift" onClick={veglegesitesKezelese}>📢 Publikálás</button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -338,7 +346,17 @@ function BeosztasNezet({ dolgozok, muszakok }) {
       )}
 
       {betoltes ? (
-        <p className="betoltes">⏳ Betöltés...</p>
+        <div className="naptar-grid">
+          {Array(7).fill(null).map((_, i) => (
+            <div key={i} className="naptar-oszlop">
+              <div className="naptar-fejlec skeleton" style={{height:'40px'}}></div>
+              <div className="naptar-cellak">
+                <div className="skeleton" style={{height:'100px', marginBottom:'10px'}}></div>
+                <div className="skeleton" style={{height:'80px'}}></div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : !beosztas ? (
         <div className="ures-lista">
           <p>📋 Nincs beosztás erre a hétre.</p>
@@ -457,35 +475,44 @@ function BeosztasNezet({ dolgozok, muszakok }) {
                               </div>
 
                               <div style={{minHeight:'20px'}}>
-                                  {slot.assigned.map((r, idx) => {
-                                    const da = dolgozoAdat(r.dolgozoId);
-                                    const ps = pozSzin(da.pozicio);
-                                    const isSajat = r.dolgozoId === user?.id;
-                                    
-                                    return (
-                                      <Draggable draggableId={`${r.dolgozoId}_${nap}_${m.id}`} index={idx}
-                                        key={`${r.dolgozoId}_${nap}_${m.id}`} isDragDisabled={!isDragEnabled}>
-                                        {(prov, snap) => (
-                                          <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps}
-                                            style={{
-                                              ...prov.draggableProps.style,
-                                              padding:'6px 10px',margin:'4px 0',
-                                              backgroundColor:snap.isDragging?'#e3f2fd':isSajat?'#fff9c4':'white',
-                                              borderRadius:'8px',
-                                              border: isSajat ? '2px solid #fbc02d' : '1px solid #e2e8f0',
-                                              boxShadow:snap.isDragging?'0 8px 16px rgba(0,0,0,0.15)':isSajat?'0 4px 8px rgba(251,192,45,0.2)':'0 1px 3px rgba(0,0,0,0.05)',
-                                              cursor:isDragEnabled?'grab':'default',
-                                              display:'flex',alignItems:'center',gap:'8px',fontSize:'0.85rem',
-                                              transition:'all 0.2s ease'
-                                            }}>
+                                    {slot.assigned.map((r, idx) => {
+                                      const da = dolgozoAdat(r.dolgozoId);
+                                      const ps = pozSzin(da.pozicio);
+                                      const isSajat = r.dolgozoId === user?.id;
+                                      
+                                      return (
+                                        <Draggable draggableId={`${r.dolgozoId}_${nap}_${m.id}`} index={idx}
+                                          key={`${r.dolgozoId}_${nap}_${m.id}`} isDragDisabled={!isDragEnabled}>
+                                          {(prov, snap) => (
+                                            <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps}
+                                              className="hover-lift animate-in"
+                                              style={{
+                                                ...prov.draggableProps.style,
+                                                padding:'6px 10px',margin:'4px 0',
+                                                backgroundColor:snap.isDragging?'#e3f2fd':isSajat?'#fff9c4':'white',
+                                                borderRadius:'12px',
+                                                border: isSajat ? '2px solid #fbc02d' : '1px solid var(--glass-border)',
+                                                boxShadow:snap.isDragging?'0 8px 16px rgba(0,0,0,0.15)':isSajat?'0 4px 12px rgba(251,192,45,0.3)':'0 2px 4px rgba(0,0,0,0.05)',
+                                                cursor:isDragEnabled?'grab':'default',
+                                                display:'flex',alignItems:'center',gap:'8px',fontSize:'0.85rem',
+                                                transition:'all 0.3s ease',
+                                                animationDelay: `${idx * 0.1 + (napok.indexOf(nap) * 0.05)}s`
+                                              }}>
                                             <span>{pozicioIkon(da.pozicio)}</span>
                                             <span style={{fontWeight:isSajat?'800':'600',flex:1,color:isSajat?'#f57f17':'#334155'}}>{da.nev} {isSajat && "(Te)"}</span>
                                             {isSajat ? (
-                                              <span style={{
-                                                fontSize:'0.6rem',padding:'2px 6px',borderRadius:'10px',
-                                                backgroundColor:'#fbc02d',color:'white',fontWeight:'900',
-                                                textTransform:'uppercase',letterSpacing:'0.5px'
-                                              }}>Saját</span>
+                                              <div style={{display:'flex', gap:'5px', alignItems:'center'}}>
+                                                <button 
+                                                  onClick={() => setCsereModal({ nap, muszakId: m.id, kezdemenyezoId: user.id })}
+                                                  className="btn-swap-mini"
+                                                  title="Csere kérése"
+                                                >🔄</button>
+                                                <span style={{
+                                                  fontSize:'0.6rem',padding:'2px 6px',borderRadius:'10px',
+                                                  backgroundColor:'#fbc02d',color:'white',fontWeight:'900',
+                                                  textTransform:'uppercase',letterSpacing:'0.5px'
+                                                }}>Saját</span>
+                                              </div>
                                             ) : (
                                               <span style={{
                                                 fontSize:'0.65rem',padding:'2px 6px',borderRadius:'6px',
@@ -515,6 +542,62 @@ function BeosztasNezet({ dolgozok, muszakok }) {
             </div>
           </div>
         </DragDropContext>
+      )}
+      {csereModal && (
+        <div className="modal-backdrop" onClick={() => setCsereModal(null)}>
+          <div className="modal-content animate-in" onClick={e => e.stopPropagation()}>
+            <h3>🔄 Kivel szeretnél cserélni?</h3>
+            <p style={{fontSize:'0.9rem', color:'#666', marginBottom:'15px'}}>
+              Válaszd ki azt a kollégát, akinek felajánlod a műszakodat a <strong>{csereModal.nap}i</strong> napon.
+            </p>
+            <div className="partner-lista" style={{maxHeight:'300px', overflowY:'auto', display:'grid', gap:'10px'}}>
+              {dolgozok.filter(d => d.id !== user.id && d.szerepkor !== "HR").map(d => (
+                <button
+                  key={d.id}
+                  className="partner-item"
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/csere`, {
+                        method: 'POST',
+                        headers: { 
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${token}` 
+                        },
+                        body: JSON.stringify({
+                          kezdemenyezoId: user.id,
+                          partnerId: d.id,
+                          muszakId: csereModal.muszakId,
+                          nap: csereModal.nap,
+                          statusz: "Fuggoben"
+                        })
+                      });
+                      if (res.ok) {
+                        alert("Csere kérelem sikeresen elküldve " + d.nev + " részére!");
+                        setCsereModal(null);
+                      } else {
+                        alert("Hiba történt a kérelem küldésekor.");
+                      }
+                    } catch (err) {
+                      alert("Hálózati hiba.");
+                    }
+                  }}
+                  style={{
+                    display:'flex', alignItems:'center', gap:'10px', padding:'12px',
+                    border:'1px solid #eee', borderRadius:'8px', background:'white', cursor:'pointer',
+                    textAlign:'left', transition:'all 0.2s'
+                  }}
+                >
+                  <span style={{fontSize:'1.2rem'}}>{pozicioIkon(d.pozicio)}</span>
+                  <div>
+                    <div style={{fontWeight:'700'}}>{d.nev}</div>
+                    <div style={{fontSize:'0.75rem', color:'#888'}}>{d.pozicio}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <button className="btn-torles" style={{marginTop:'20px', width:'100%'}} onClick={() => setCsereModal(null)}>Mégse</button>
+          </div>
+        </div>
       )}
     </div>
   );

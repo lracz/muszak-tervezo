@@ -76,14 +76,21 @@ A frontend az `http://localhost:5173`, a backend a `http://localhost:8080` címe
 
 ---
 
+## 🚀 Legújabb Fejlesztések (Enterprise Funkciók)
+- [x] **Dátum-alapú Szabadságkezelés:** Valódi naptári napok szerinti igénylés, amit az algoritmus automatikusan kizár a tervezésnél.
+- [x] **Bérköltség-becslés:** Dolgozónkénti órabér alapú heti költségkalkuláció a HR számára.
+- [x] **Műszakcsere (Swap):** Dolgozók közötti műszakcsere kérelmek és HR jóváhagyási munkafolyamat.
+- [x] **Dark Mode:** Teljes körű sötét mód támogatás a szemkímélő éjszakai munkához.
+
 ## 🔮 Jövőbeli Tervek (Továbbfejlesztési Lehetőségek)
 
 A jelenlegi robusztus, "Hard Constraint" alapú rendszeren túl a következő iparági funkciók bevezetését tervezzük a **Soft Constraints (Preferenciák) és Optimalizációs AI** területén:
 
 1. **"Soft Constraints" és Dolgozói Preferenciák Bevezetése**: A jelenlegi rendszer az első érvényes szabad helyre teszi a dolgozót. A jövőben a dolgozók megadhatnák, hogy *preferálják* a reggeli műszakot, vagy *kerülnék* a hétvégéket. Az algoritmust kibővítjük egy **Pontozásos (Scoring) AI** logikával, ahol a cél a "Dolgozói Elégedettség" (Happiness Index) maximalizálása lesz (pl. preferált műszak +10 pont, nem szeretett műszak -5 pont).
-2. **Kötelező Minimum Munkaóra és Éves Szabadság Keret (Dátum-alapon)**: Jelenleg csak a `MaxHetiOra` kerül ellenőrzésre. A jövőben bevezetjük a teljes munkaidősök *Minimum elvárt óraszámát*, amit az algoritmus prioritásként kezel. Illetve a heti sablon-alapú szabadságigénylést átalakítjuk konkrét naptári napok (YYYY-MM-DD) alapú, valódi 20/25 napos levonásos rendszerré.
-3. **Valós Idejű Értesítések (SignalR)**: A React kliensek automatikus push notifikációt kapnak, ha a HR egy új beosztást véglegesít, manuális frissítés nélkül.
+2. **Kötelező Minimum Munkaóra és Éves Szabadság Keret**: Jelenleg a heti `MaxHetiOra` és a konkrét naptári szabadságok (Sprint 12) kerülnek ellenőrzésre. A jövőben bevezetjük a teljes munkaidősök *Minimum elvárt óraszámát*, amit az algoritmus prioritásként kezel, valamint egy éves szabadság-keret figyelőt (pl. 20/25 napos levonásos rendszer).
+3. **Valós Idejű Értesítések (SignalR)**: A React kliensek automatikus push notifikációt kapnak, ha a HR egy új beosztást véglegesít, vagy ha egy műszakcsere kérést jóváhagytak, manuális frissítés nélkül.
 4. **Prediktív ML.NET Integráció**: Prediktív MI modellek bevonása, ami előre megmondja az optimális heti szükséges létszámot történelmi forgalmi adatok és ünnepek alapján.
+5. **Munkaruházat és Eszközkezelés**: Kiadott eszközök (tablet, POS terminál) követése a műszakokhoz rendelve.
 
 ---
 
@@ -172,9 +179,11 @@ erDiagram
 |-----------|--------|-----------|
 | `dolgozok` | Munkavállalók adatai | Sprint 1 |
 | `muszakok` | Műszak típusok (reggeli, délutáni, éjszakai) | Sprint 2 |
-| `elerhetoseg` | Dolgozók elérhetősége és szabadságigényei | Sprint 2 |
+| `elerhetoseg` | Dolgozók elérhetősége | Sprint 2 |
 | `beosztasok` | Generált heti beosztások | Sprint 3 |
 | `beosztasReszletek` | Egy beosztáson belüli egyedi hozzárendelések | Sprint 3 |
+| `szabadsagok` | Dátum-alapú szabadságkérelmek | Sprint 12 (Új!) |
+| `csereKerelmek` | Műszakcsere igények és állapotuk | Sprint 12 (Új!) |
 
 ---
 

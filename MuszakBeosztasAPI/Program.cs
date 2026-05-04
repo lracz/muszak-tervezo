@@ -43,6 +43,9 @@ builder.Services.AddScoped<DolgozoService>();
 builder.Services.AddScoped<MuszakService>();
 builder.Services.AddScoped<ElerhetosegService>();
 builder.Services.AddScoped<BeosztasService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<SzabadsagService>();
+builder.Services.AddScoped<CsereService>();
 
 // JWT Konfiguráció
 var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") 

@@ -31,6 +31,9 @@ namespace MuszakBeosztasAPI.Models
         public int MaxHetiOra { get; set; } = 40;
 
         [FirestoreProperty]
+        public int Oraber { get; set; } = 2500; // Alapértelmezett órabér
+
+        [FirestoreProperty]
         public string JelszoHash { get; set; } = ""; // Belső loginhez egy hash
         
         [FirestoreProperty]

@@ -94,6 +94,12 @@ graph TD
     
     Beosztas --> HetValaszto[HetValaszto.jsx]
     Beosztas --> BeosztasNezet[BeosztasNezet.jsx]
+    
+    App --> Szabadsag[Szabadság tab]
+    App --> Csere[Műszakcsere tab]
+    
+    Szabadsag --> SzabadsagKezelo[SzabadsagKezelo.jsx]
+    Csere --> CsereKezelo[CsereKezelo.jsx]
 ```
 
 ### Service réteg
@@ -157,9 +163,27 @@ erDiagram
         string nap
     }
 
+    SZABADSAGOK {
+        string id PK
+        string dolgozoId FK
+        datetime mettol
+        datetime meddig
+        string statusz
+    }
+
+    CSERE_KERELMEK {
+        string id PK
+        string kezdemenyezoId FK
+        string muszakId FK
+        string nap
+        string statusz
+    }
+
     DOLGOZOK ||--o{ ELERHETOSEG : "elérhetőségei"
     DOLGOZOK ||--o{ BEOSZTAS_RESZLETEK : "beosztásai"
+    DOLGOZOK ||--o{ SZABADSAGOK : "szabadságai"
     MUSZAKOK ||--o{ BEOSZTAS_RESZLETEK : "műszakhoz rendelt"
+    MUSZAKOK ||--o{ CSERE_KERELMEK : "cserélendő"
     BEOSZTASOK ||--o{ BEOSZTAS_RESZLETEK : "tartalmazza"
 ```
 
@@ -199,6 +223,12 @@ erDiagram
 | `POST` | `/api/beosztas/general/{het}` | Beosztás generálás |
 | `GET` | `/api/beosztas/{het}` | Heti beosztás lekérdezés |
 | `PUT` | `/api/beosztas/{id}/veglegesit` | Beosztás véglegesítés |
+| `GET` | `/api/szabadsag` | Összes szabadság kérelem |
+| `POST` | `/api/szabadsag` | Új szabadság igénylése |
+| `PUT` | `/api/szabadsag/{id}/statusz` | Szabadság elfogadása/elutasítása |
+| `GET` | `/api/csere` | Összes csere kérelem |
+| `POST` | `/api/csere` | Új csere kérés leadása |
+| `PUT` | `/api/csere/{id}/statusz` | Csere jóváhagyása |
 
 ---
 

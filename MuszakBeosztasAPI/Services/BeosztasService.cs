@@ -9,13 +9,15 @@ namespace MuszakBeosztasAPI.Services
         private readonly DolgozoService _dolgozoService;
         private readonly MuszakService _muszakService;
         private readonly ElerhetosegService _elerhetosegService;
+        private readonly SzabadsagService _szabadsagService;
 
-        public BeosztasService(FirestoreDb db, DolgozoService dolgozoService, MuszakService muszakService, ElerhetosegService elerhetosegService)
+        public BeosztasService(FirestoreDb db, DolgozoService dolgozoService, MuszakService muszakService, ElerhetosegService elerhetosegService, SzabadsagService szabadsagService)
         {
             _db = db;
             _dolgozoService = dolgozoService;
             _muszakService = muszakService;
             _elerhetosegService = elerhetosegService;
+            _szabadsagService = szabadsagService;
         }
 
         // ==============================================================================
@@ -27,6 +29,7 @@ namespace MuszakBeosztasAPI.Services
             var dolgozok = await _dolgozoService.OsszesLekerese();
             var muszakok = await _muszakService.OsszesLekerese();
             var elerhetosegek = await _elerhetosegService.OsszesLekerese();
+            var szabadsagok = await _szabadsagService.OsszesLekerese();
 
             var ujBeosztas = new Beosztas
             {
@@ -63,7 +66,7 @@ namespace MuszakBeosztasAPI.Services
             try 
             {
                 // A Backtracking hívása
-                Sikerult = MegoldasKeresese(0, betoltendoSlotok, dolgozok, elerhetosegek, hetiOrakDolgozonkent, beosztasLista, cts.Token);
+                Sikerult = MegoldasKeresese(0, betoltendoSlotok, dolgozok, elerhetosegek, szabadsagok, het, hetiOrakDolgozonkent, beosztasLista, cts.Token);
             }
             catch (OperationCanceledException)
             {
@@ -79,7 +82,7 @@ namespace MuszakBeosztasAPI.Services
             else
             {
                 // Ha elhasal a tökéletes megoldás, átváltunk a Mohó (Greedy) Algoritmusra!
-                var greedyLista = GreedyBeosztas(betoltendoSlotok, dolgozok, elerhetosegek);
+                var greedyLista = GreedyBeosztas(betoltendoSlotok, dolgozok, elerhetosegek, szabadsagok, het);
                 ujBeosztas.Reszletek = greedyLista;
                 ujBeosztas.Allapot = "Tervezet (Hiányos / Greedy)";
             }
@@ -141,55 +144,44 @@ namespace MuszakBeosztasAPI.Services
                 if (maIndex > 0) {
                     string tegnap = napok[maIndex - 1];
                     if (jelenlegiBeosztas.Any(b => b.DolgozoId == d.Id && b.Nap == tegnap)) {
-                        score += 200;
-                    }
-                }
+            List<BeosztasReszlet> beosztas, 
+            CancellationToken ct)
+        {
+            if (ct.IsCancellationRequested) return false;
+            if (slotIndex == slotok.Count) return true; // Minden slotot betöltöttünk!
 
-                return new { Dolgozo = d, Score = score };
-            })
-            .OrderByDescending(x => x.Score)
-            .Select(x => x.Dolgozo)
-            .ToList();
+            var slot = slotok[slotIndex];
+            var aktualisMuszak = slot.muszak;
+
+            var rendezettDolgozok = dolgozok
+                .OrderByDescending(d => 
+                    !string.IsNullOrEmpty(d.PreferaltNapszak) && aktualisMuszak.Megnevezes.Contains(d.PreferaltNapszak, StringComparison.OrdinalIgnoreCase) ? 1 : 0
+                )
+                .ThenBy(d => hetiOrak[d.Id]).ToList();
 
             foreach (var dolgozo in rendezettDolgozok)
             {
-                if (ValidE(dolgozo, aktualisSlot.nap, aktualisMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas, slotok))
+                if (ValidE(dolgozo, slot.nap, het, aktualisMuszak, elerhetosegek, szabadsagok, hetiOrak, beosztas, slotok))
                 {
-                    // Lépés megtétele (Assign)
-                    var ujReszlet = new BeosztasReszlet
-                    {
-                        DolgozoId = dolgozo.Id,
-                        MuszakId = aktualisMuszak.Id,
-                        Nap = aktualisSlot.nap
-                    };
-                    
-                    jelenlegiBeosztas.Add(ujReszlet);
-                    
-                    // Számoljuk a műszak hosszát (kb 8 óra feltételezéssel, vagy pontos parsolással)
-                    int muszakOrak = SzamolOrakat(aktualisMuszak.Kezdes, aktualisMuszak.Befejezes);
-                    hetiOrak[dolgozo.Id] += muszakOrak;
+                    // Hozzáadás a beosztáshoz
+                    var ujReszlet = new BeosztasReszlet { DolgozoId = dolgozo.Id, MuszakId = aktualisMuszak.Id, Nap = slot.nap };
+                    beosztas.Add(ujReszlet);
+                    int muszakHossza = SzamolOrakat(aktualisMuszak.Kezdes, aktualisMuszak.Befejezes);
+                    hetiOrak[dolgozo.Id] += muszakHossza;
 
-                    // Rekurzív hívás a következő slotra
-                    if (MegoldasKeresese(slotIndex + 1, slotok, dolgozok, elerhetosegek, hetiOrak, jelenlegiBeosztas, cancellationToken))
-                    {
-                        return true; // Találtunk végleges megoldást mélyebben
-                    }
+                    if (MegoldasKeresese(slotIndex + 1, slotok, dolgozok, elerhetosegek, szabadsagok, het, hetiOrak, beosztas, ct)) return true;
 
-                    // Visszalépés (Backtrack) ha a mélyebb hívás nem vezetett megoldásra
-                    jelenlegiBeosztas.Remove(ujReszlet);
-                    hetiOrak[dolgozo.Id] -= muszakOrak;
+                    // Backtrack: ha nem vezetett sikerre, vonjuk vissza
+                    beosztas.Remove(ujReszlet);
+                    hetiOrak[dolgozo.Id] -= muszakHossza;
                 }
             }
 
-            // Ha egyetlen dolgozóval sem lehet betölteni ezt a slotot a jelenlegi konfiguráció mellett, visszalépünk.
             return false;
         }
 
         // Mohó (Greedy) Algoritmus vészhelyzetre
-        private List<BeosztasReszlet> GreedyBeosztas(
-            List<(Muszak muszak, string nap)> slotok, 
-            List<Dolgozo> dolgozok, 
-            List<Elerhetoseg> elerhetosegek)
+        private List<BeosztasReszlet> GreedyBeosztas(List<(Muszak muszak, string nap)> slotok, List<Dolgozo> dolgozok, List<Elerhetoseg> elerhetosegek, List<Szabadsag> szabadsagok, string het)
         {
             var beosztasLista = new List<BeosztasReszlet>();
             var hetiOrak = dolgozok.ToDictionary(d => d.Id, d => 0);
@@ -197,44 +189,43 @@ namespace MuszakBeosztasAPI.Services
             foreach (var slot in slotok)
             {
                 var aktualisMuszak = slot.muszak;
-                
-                // Preferencia egyezés alapján, majd heti órák szerint
                 var rendezettDolgozok = dolgozok.OrderByDescending(d => 
                     !string.IsNullOrEmpty(d.PreferaltNapszak) && aktualisMuszak.Megnevezes.Contains(d.PreferaltNapszak, StringComparison.OrdinalIgnoreCase) ? 1 : 0
                 ).ThenBy(d => hetiOrak[d.Id]).ToList();
 
                 foreach (var dolgozo in rendezettDolgozok)
                 {
-                    if (ValidE(dolgozo, slot.nap, aktualisMuszak, elerhetosegek, hetiOrak, beosztasLista, slotok))
+                    if (ValidE(dolgozo, slot.nap, het, aktualisMuszak, elerhetosegek, szabadsagok, hetiOrak, beosztasLista, slotok))
                     {
-                        var ujReszlet = new BeosztasReszlet
-                        {
-                            DolgozoId = dolgozo.Id,
-                            MuszakId = aktualisMuszak.Id,
-                            Nap = slot.nap
-                        };
-                        
-                        beosztasLista.Add(ujReszlet);
-                        
-                        int muszakOrak = SzamolOrakat(aktualisMuszak.Kezdes, aktualisMuszak.Befejezes);
-                        hetiOrak[dolgozo.Id] += muszakOrak;
-                        
-                        break; // Csak egy embert osztunk be erre a konkrét slot "helyre", majd megyünk a következő slotra.
+                        beosztasLista.Add(new BeosztasReszlet { DolgozoId = dolgozo.Id, MuszakId = aktualisMuszak.Id, Nap = slot.nap });
+                        hetiOrak[dolgozo.Id] += SzamolOrakat(aktualisMuszak.Kezdes, aktualisMuszak.Befejezes);
+                        break;
                     }
                 }
             }
-
             return beosztasLista;
         }
 
         // Hard Constraints ellenőrzése
-        private bool ValidE(Dolgozo dolgozo, string nap, Muszak muszak, List<Elerhetoseg> elerhetosegek, Dictionary<string, int> hetiOrak, List<BeosztasReszlet> beosztas, List<(Muszak muszak, string nap)> slotok = null)
+        private bool ValidE(Dolgozo dolgozo, string nap, string het, Muszak muszak, List<Elerhetoseg> elerhetosegek, List<Szabadsag> szabadsagok, Dictionary<string, int> hetiOrak, List<BeosztasReszlet> beosztas, List<(Muszak muszak, string nap)> slotok)
         {
+            // 0. Szabadság ellenőrzése (Konkrét dátumra)
+            DateTime? aktualisDatum = GetDateFromWeekAndDay(het, nap);
+            if (aktualisDatum.HasValue)
+            {
+                var szabadsagonVan = szabadsagok.Any(s => 
+                    s.DolgozoId == dolgozo.Id && 
+                    s.Statusz == "Jovahagyva" && 
+                    aktualisDatum.Value.Date >= s.Mettol.Date && 
+                    aktualisDatum.Value.Date <= s.Meddig.Date);
+                
+                if (szabadsagonVan) return false;
+            }
+
             // 1. Elérhetőség vizsgálata aznapra
             var elerhetoE = elerhetosegek.FirstOrDefault(e => e.DolgozoId == dolgozo.Id && e.Nap == nap);
             if (elerhetoE != null && !elerhetoE.Elerheto) 
             {
-                // DEBUG LOG: Csak a fontosabb ütközéseket nézzük
                 if (dolgozo.Nev == "Fekete Zsolt") {
                     Console.WriteLine($"[VALIDÁCIÓ] {dolgozo.Nev} elutasítva {nap} napra: SZABADNAP");
                 }
@@ -350,6 +341,34 @@ namespace MuszakBeosztasAPI.Services
                 { "Allapot", "Tervezet (Manuálisan módosítva)" }
             });
             return true;
+        }
+        private DateTime? GetDateFromWeekAndDay(string het, string nap)
+        {
+            try
+            {
+                // Formátum: YYYY-Www (pl. 2026-W13)
+                var parts = het.Split("-W");
+                int year = int.Parse(parts[0]);
+                int week = int.Parse(parts[1]);
+
+                DateTime jan1 = new DateTime(year, 1, 1);
+                int daysOffset = DayOfWeek.Thursday - jan1.DayOfWeek;
+
+                DateTime firstThursday = jan1.AddDays(daysOffset);
+                var cal = System.Globalization.CultureInfo.CurrentCulture.Calendar;
+                int firstWeek = cal.GetWeekOfYear(firstThursday, System.Globalization.DateTimeFormatInfo.CurrentInfo.CalendarWeekRule, System.Globalization.DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek);
+
+                var weekNum = week;
+                if (firstWeek <= 1) weekNum -= 1;
+
+                DateTime result = firstThursday.AddDays(weekNum * 7);
+                DateTime monday = result.AddDays(-3);
+
+                var napok = new List<string> { "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap" };
+                int index = napok.IndexOf(nap);
+                return monday.AddDays(index);
+            }
+            catch { return null; }
         }
     }
 }

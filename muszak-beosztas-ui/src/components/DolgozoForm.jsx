@@ -7,6 +7,7 @@ function DolgozoForm({ mentesKezelo }) {
   const [email, setEmail] = useState("");
   const [telefonszam, setTelefonszam] = useState("");
   const [pozicio, setPozicio] = useState("");
+  const [oraber, setOraber] = useState(2500);
   const [hibaUzenet, setHibaUzenet] = useState("");
 
   // Űrlap beküldése
@@ -25,6 +26,7 @@ function DolgozoForm({ mentesKezelo }) {
       email: email.trim(),
       telefonszam: telefonszam.trim(),
       pozicio: pozicio.trim(),
+      oraber: parseInt(oraber) || 2500,
     };
 
     try {
@@ -34,6 +36,7 @@ function DolgozoForm({ mentesKezelo }) {
       setEmail("");
       setTelefonszam("");
       setPozicio("");
+      setOraber(2500);
     } catch (hiba) {
       setHibaUzenet("Hiba történt a mentés során!");
     }
@@ -87,6 +90,17 @@ function DolgozoForm({ mentesKezelo }) {
             value={pozicio}
             onChange={(e) => setPozicio(e.target.value)}
             placeholder="Pl. Pénztáros"
+          />
+        </div>
+
+        <div className="form-mezo">
+          <label htmlFor="oraber">Órabér (Ft/óra)</label>
+          <input
+            id="oraber"
+            type="number"
+            value={oraber}
+            onChange={(e) => setOraber(e.target.value)}
+            placeholder="Pl. 2500"
           />
         </div>
 

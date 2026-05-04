@@ -7,7 +7,11 @@ namespace MuszakBeosztasAPI.Models
     public class Dolgozo
     {
         // A Firestore dokumentum azonosítója (nem tároljuk mezőként)
+        [FirestoreDocumentId]
         public string? Id { get; set; }
+
+        [FirestoreProperty]
+        public string PreferaltNapszak { get; set; } = "";
 
         [FirestoreProperty]
         public string Nev { get; set; } = "";

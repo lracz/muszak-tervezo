@@ -184,19 +184,25 @@ function BeosztasNezet({ dolgozok, muszakok }) {
     const { source, destination, draggableId } = result;
     if (source.droppableId === destination.droppableId) return;
 
-    // Ellenőrizzük, hogy a sidebarról húzunk-e
     const fromSidebar = source.droppableId === "kvota-sidebar";
+    const toSidebar = destination.droppableId === "kvota-sidebar";
     const dolgozoId = draggableId.split("_")[0];
-    const [destNap, destMuszakId] = destination.droppableId.split("_");
 
     if (fromSidebar) {
       // Sidebar → Shift: hozzáadjuk
+      const [destNap, destMuszakId] = destination.droppableId.split("_");
       const ujReszlet = { dolgozoId, muszakId: destMuszakId, nap: destNap };
       setLocalReszletek(prev => [...prev, ujReszlet]);
+      setVanModositas(true);
+    } else if (toSidebar) {
+      // Shift → Sidebar: eltávolítás
+      const [sourceNap, sourceMuszakId] = source.droppableId.split("_");
+      setLocalReszletek(prev => prev.filter(r => !(r.dolgozoId === dolgozoId && r.nap === sourceNap && r.muszakId === sourceMuszakId)));
       setVanModositas(true);
     } else {
       // Shift → Shift: áthelyezés
       const [sourceNap, sourceMuszakId] = source.droppableId.split("_");
+      const [destNap, destMuszakId] = destination.droppableId.split("_");
       const updated = localReszletek.map(r => {
         if (r.dolgozoId === dolgozoId && r.nap === sourceNap && r.muszakId === sourceMuszakId) {
           return { ...r, nap: destNap, muszakId: destMuszakId };
@@ -284,7 +290,7 @@ function BeosztasNezet({ dolgozok, muszakok }) {
                       }}>{l}</button>
                   ))}
                 </div>
-                <Droppable droppableId="kvota-sidebar" isDropDisabled={true}>
+                <Droppable droppableId="kvota-sidebar" isDropDisabled={!isDragEnabled}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       {rendezettKvota.map((d, i) => {

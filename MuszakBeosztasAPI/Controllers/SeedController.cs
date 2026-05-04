@@ -80,14 +80,32 @@ namespace MuszakBeosztasAPI.Controllers
                 { 14, new[] { "Szombat", "Vasárnap" } },   // Pintér Luca (részmunkaidős)
             };
 
+            // Preferenciák a dolgozók számára
+            var preferenciak = new Dictionary<int, string>
+            {
+                { 2, "Reggel" }, // Molnár István
+                { 3, "Este" },   // Varga Péter
+                { 4, "Reggel" }, // Kiss Anita
+                { 5, "Reggel" }, // Fekete Zsolt (mindig reggel szeret lenni)
+                { 6, "Reggel" }, // Szabó Eszter
+                { 7, "Este" },   // Nagy Tamás
+                { 8, "Este" },   // Tóth Gergő
+                { 9, "Reggel" }, // Horváth Réka
+                { 10, "Délután" },// Juhász Vivien
+                { 11, "Délután" },// Simon Ádám
+                { 12, "Délután" } // Lakatos Nóra
+            };
+
             for (int i = 0; i < dolgozok.Length; i++)
             {
                 var (nev, email, poz, szerep, maxOra, tel) = dolgozok[i];
+                var pref = preferenciak.ContainsKey(i) ? preferenciak[i] : "";
 
                 var docRef = await dolgozokRef.AddAsync(new Dictionary<string, object> {
                     {"Nev", nev}, {"Email", email}, {"Pozicio", poz},
                     {"Szerepkor", szerep}, {"Telefonszam", tel},
-                    {"JelszoHash", pw}, {"MaxHetiOra", maxOra}
+                    {"JelszoHash", pw}, {"MaxHetiOra", maxOra},
+                    {"PreferaltNapszak", pref}
                 });
 
                 var szabad = szabadnapok.ContainsKey(i) ? szabadnapok[i] : Array.Empty<string>();

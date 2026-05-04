@@ -113,8 +113,10 @@ namespace MuszakBeosztasAPI.Services
             var aktualisSlot = slotok[slotIndex];
             var aktualisMuszak = aktualisSlot.muszak;
             
-            // Value Ordering Heurisztika: Olyan dolgozókat próbálunk beosztani, akiknek a legkevesebb órájuk van a héten.
-            var rendezettDolgozok = dolgozok.OrderBy(d => hetiOrak[d.Id]).ToList();
+            // Value Ordering Heurisztika: Preferencia egyezés alapján, majd heti órák szerint
+            var rendezettDolgozok = dolgozok.OrderByDescending(d => 
+                !string.IsNullOrEmpty(d.PreferaltNapszak) && aktualisMuszak.Megnevezes.Contains(d.PreferaltNapszak, StringComparison.OrdinalIgnoreCase) ? 1 : 0
+            ).ThenBy(d => hetiOrak[d.Id]).ToList();
 
             foreach (var dolgozo in rendezettDolgozok)
             {
@@ -163,8 +165,10 @@ namespace MuszakBeosztasAPI.Services
             {
                 var aktualisMuszak = slot.muszak;
                 
-                // Olyan dolgozókat próbálunk beosztani, akiknek a legkevesebb órájuk van a héten.
-                var rendezettDolgozok = dolgozok.OrderBy(d => hetiOrak[d.Id]).ToList();
+                // Preferencia egyezés alapján, majd heti órák szerint
+                var rendezettDolgozok = dolgozok.OrderByDescending(d => 
+                    !string.IsNullOrEmpty(d.PreferaltNapszak) && aktualisMuszak.Megnevezes.Contains(d.PreferaltNapszak, StringComparison.OrdinalIgnoreCase) ? 1 : 0
+                ).ThenBy(d => hetiOrak[d.Id]).ToList();
 
                 foreach (var dolgozo in rendezettDolgozok)
                 {

@@ -7,7 +7,7 @@ namespace MuszakBeosztasAPI.Services
     public class ElerhetosegService
     {
         private readonly FirestoreDb _firestore;
-        private readonly string _kollekcioNev = "elerhetoseg";
+        private readonly string _kollekcioNev = "elerhetosegek";
 
         public ElerhetosegService(FirestoreDb firestore)
         {

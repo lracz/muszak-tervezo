@@ -22,8 +22,10 @@ function BeosztasNezet({ dolgozok, muszakok }) {
   const [generalas, setGeneralas] = useState(false);
   const [mentesFolyamatban, setMentesFolyamatban] = useState(false);
   const [vanModositas, setVanModositas] = useState(false);
-  const [hibaUzenet, setHibaUzenet] = useState("");
-  const [kvotaSortBy, setKvotaSortBy] = useState("nev"); // "nev" | "pozicio" | "maradt"
+  const [hibaUzenet, setHibaUzenet] = useState(null);
+  const [sikerUzenet, setSikerUzenet] = useState(null);
+  const [sidebarNyitva, setSidebarNyitva] = useState(true);
+  const [kvotaSortBy, setKvotaSortBy] = useState("maradt"); // nev, pozicio, maradt
 
   const napok = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
 
@@ -49,10 +51,14 @@ function BeosztasNezet({ dolgozok, muszakok }) {
 
   const beosztasGeneralasKezelese = async () => {
     try {
-      setGeneralas(true); setHibaUzenet("");
+      setGeneralas(true);
+      setHibaUzenet(null);
       await beosztasGeneralasa(het);
       await beosztasBetoltese();
-    } catch { setHibaUzenet("Hiba a generálásnál."); }
+      setSikerUzenet("Beosztás sikeresen generálva!");
+      setTimeout(() => setSikerUzenet(null), 3000);
+    } catch (error) {
+      setHibaUzenet("Hiba a generálásnál."); }
     finally { setGeneralas(false); }
   };
 
@@ -67,8 +73,12 @@ function BeosztasNezet({ dolgozok, muszakok }) {
     if (!beosztas?.id) return;
     try {
       setMentesFolyamatban(true);
+      setHibaUzenet(null);
       await beosztasModositasa(beosztas.id, localReszletek);
-      await beosztasBetoltese(); setVanModositas(false);
+      await beosztasBetoltese(); 
+      setVanModositas(false);
+      setSikerUzenet("Módosítások elmentve!");
+      setTimeout(() => setSikerUzenet(null), 3000);
     } catch { setHibaUzenet("Hiba a mentésnél."); }
     finally { setMentesFolyamatban(false); }
   };
@@ -169,7 +179,13 @@ function BeosztasNezet({ dolgozok, muszakok }) {
         .sort((a, b) => muszakSorrend(a) - muszakSorrend(b)); // Időrend!
       grid[nap] = napiMuszakok.map(m => ({
         muszak: m,
-        assigned: localReszletek.filter(r => r.nap === nap && r.muszakId === m.id)
+        assigned: localReszletek
+          .filter(r => r.nap === nap && r.muszakId === m.id)
+          .sort((a, b) => {
+            const da = dolgozoAdat(a.dolgozoId);
+            const db = dolgozoAdat(b.dolgozoId);
+            return da.nev.localeCompare(db.nev, "hu");
+          })
       }));
     });
     return grid;
@@ -232,6 +248,9 @@ function BeosztasNezet({ dolgozok, muszakok }) {
           )}
           {isHR && (
             <>
+              <button className={`btn-secondary ${sidebarNyitva ? 'active' : ''}`} onClick={() => setSidebarNyitva(!sidebarNyitva)}>
+                👥 {sidebarNyitva ? "Kvóta elrejtése" : "Dolgozói kvóta"}
+              </button>
               <button className="btn-general" onClick={beosztasGeneralasKezelese} disabled={generalas || vanModositas}>
                 {generalas ? "⏳ Generálás..." : "⚡ Új Generálás"}
               </button>
@@ -247,17 +266,19 @@ function BeosztasNezet({ dolgozok, muszakok }) {
             </>
           )}
         </div>
-        {beosztas && (
-          <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
-            <span className={`allapot-badge ${beosztas.allapot==="Végleges"?"vegleges":(vanModositas?"tervezet-modositva":"tervezet")}`}>
-              {vanModositas ? "Módosítva (Mentetlen)" : beosztas.allapot==="Végleges" ? "✅ Publikált" : beosztas.allapot}
-            </span>
-            <span style={{fontSize:'0.85rem',color:'#666'}}>{betoltottSlot}/{osszesSlot} pozíció</span>
-          </div>
-        )}
       </div>
 
-      {hibaUzenet && <div className="hiba-banner">{hibaUzenet}</div>}
+      {hibaUzenet && <div className="error-msg" style={{padding:'10px',backgroundColor:'#ffebee',color:'#c62828',borderRadius:'8px',marginBottom:'15px',border:'1px solid #ef9a9a'}}>⚠️ {hibaUzenet}</div>}
+      {sikerUzenet && <div className="success-msg" style={{padding:'10px',backgroundColor:'#e8f5e9',color:'#2e7d32',borderRadius:'8px',marginBottom:'15px',border:'1px solid #a5d6a7'}}>✅ {sikerUzenet}</div>}
+
+      {beosztas && (
+        <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
+          <span className={`allapot-badge ${beosztas.allapot==="Végleges"?"vegleges":(vanModositas?"tervezet-modositva":"tervezet")}`}>
+            {vanModositas ? "Módosítva (Mentetlen)" : beosztas.allapot==="Végleges" ? "✅ Publikált" : beosztas.allapot}
+          </span>
+          <span style={{fontSize:'0.85rem',color:'#666'}}>{betoltottSlot}/{osszesSlot} pozíció</span>
+        </div>
+      )}
 
       {betoltes ? (
         <p className="betoltes">⏳ Betöltés...</p>
@@ -268,23 +289,13 @@ function BeosztasNezet({ dolgozok, muszakok }) {
         </div>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
-          <div style={{display:'flex',gap:'16px'}}>
+          <div className="beosztas-belso" style={{display:'flex',gap:'20px',alignItems:'flex-start'}}>
             {/* ═══ KVÓTA SIDEBAR ═══ */}
-            {isHR && (
-              <div style={{
-                width:'260px',minWidth:'260px',
-                backgroundColor:'#f8f9fa',borderRadius:'12px',padding:'12px',
-                border:'1px solid #dee2e6',maxHeight:'80vh',overflowY:'auto',
-                position:'sticky',top:'20px'
+            {isHR && sidebarNyitva && (
+              <div className="kvota-sidebar" style={{
+                width:'280px',backgroundColor:'#f8f9fa',padding:'15px',borderRadius:'12px',
+                border:'1px solid #e0e0e0',position:'sticky',top:'20px',maxHeight:'85vh',overflowY:'auto'
               }}>
-                <h3 style={{margin:'0 0 8px',fontSize:'0.95rem',color:'#495057'}}>
-                  👥 Heti kvóta
-                </h3>
-                <div style={{display:'flex',gap:'4px',marginBottom:'10px',flexWrap:'wrap'}}>
-                  {[{k:"nev",l:"Név"},{k:"pozicio",l:"Pozíció"},{k:"maradt",l:"Szabad"}].map(({k,l})=>(
-                    <button key={k} onClick={()=>setKvotaSortBy(k)}
-                      style={{
-                        padding:'3px 8px',fontSize:'0.7rem',borderRadius:'6px',border:'1px solid #ccc',
                         backgroundColor:kvotaSortBy===k?'#4a90e2':'white',
                         color:kvotaSortBy===k?'white':'#666',cursor:'pointer',fontWeight:'600'
                       }}>{l}</button>

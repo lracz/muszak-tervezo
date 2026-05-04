@@ -400,34 +400,46 @@ function BeosztasNezet({ dolgozok, muszakok }) {
                               </div>
 
                               <div style={{minHeight:'20px'}}>
-                                {slot.assigned.map((r, idx) => {
-                                  const da = dolgozoAdat(r.dolgozoId);
-                                  const ps = pozSzin(da.pozicio);
-                                  return (
-                                    <Draggable draggableId={`${r.dolgozoId}_${nap}_${m.id}`} index={idx}
-                                      key={`${r.dolgozoId}_${nap}_${m.id}`} isDragDisabled={!isDragEnabled}>
-                                      {(prov, snap) => (
-                                        <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps}
-                                          style={{
-                                            ...prov.draggableProps.style,
-                                            padding:'4px 8px',margin:'3px 0',
-                                            backgroundColor:snap.isDragging?'#e3f2fd':'white',
-                                            borderRadius:'6px',border:'1px solid #e0e0e0',
-                                            boxShadow:snap.isDragging?'0 4px 8px rgba(0,0,0,0.15)':'0 1px 2px rgba(0,0,0,0.05)',
-                                            cursor:isDragEnabled?'grab':'default',
-                                            display:'flex',alignItems:'center',gap:'5px',fontSize:'0.8rem'
-                                          }}>
-                                          <span>{pozicioIkon(da.pozicio)}</span>
-                                          <span style={{fontWeight:'600',flex:1}}>{da.nev}</span>
-                                          <span style={{
-                                            fontSize:'0.6rem',padding:'1px 5px',borderRadius:'6px',
-                                            backgroundColor:ps.bg,color:ps.text,fontWeight:'600'
-                                          }}>{da.pozicio}</span>
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  );
-                                })}
+                                  {slot.assigned.map((r, idx) => {
+                                    const da = dolgozoAdat(r.dolgozoId);
+                                    const ps = pozSzin(da.pozicio);
+                                    const isSajat = r.dolgozoId === user?.id;
+                                    
+                                    return (
+                                      <Draggable draggableId={`${r.dolgozoId}_${nap}_${m.id}`} index={idx}
+                                        key={`${r.dolgozoId}_${nap}_${m.id}`} isDragDisabled={!isDragEnabled}>
+                                        {(prov, snap) => (
+                                          <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps}
+                                            style={{
+                                              ...prov.draggableProps.style,
+                                              padding:'6px 10px',margin:'4px 0',
+                                              backgroundColor:snap.isDragging?'#e3f2fd':isSajat?'#fff9c4':'white',
+                                              borderRadius:'8px',
+                                              border: isSajat ? '2px solid #fbc02d' : '1px solid #e2e8f0',
+                                              boxShadow:snap.isDragging?'0 8px 16px rgba(0,0,0,0.15)':isSajat?'0 4px 8px rgba(251,192,45,0.2)':'0 1px 3px rgba(0,0,0,0.05)',
+                                              cursor:isDragEnabled?'grab':'default',
+                                              display:'flex',alignItems:'center',gap:'8px',fontSize:'0.85rem',
+                                              transition:'all 0.2s ease'
+                                            }}>
+                                            <span>{pozicioIkon(da.pozicio)}</span>
+                                            <span style={{fontWeight:isSajat?'800':'600',flex:1,color:isSajat?'#f57f17':'#334155'}}>{da.nev} {isSajat && "(Te)"}</span>
+                                            {isSajat ? (
+                                              <span style={{
+                                                fontSize:'0.6rem',padding:'2px 6px',borderRadius:'10px',
+                                                backgroundColor:'#fbc02d',color:'white',fontWeight:'900',
+                                                textTransform:'uppercase',letterSpacing:'0.5px'
+                                              }}>Saját</span>
+                                            ) : (
+                                              <span style={{
+                                                fontSize:'0.65rem',padding:'2px 6px',borderRadius:'6px',
+                                                backgroundColor:ps.bg,color:ps.text,fontWeight:'600'
+                                              }}>{da.pozicio}</span>
+                                            )}
+                                          </div>
+                                        )}
+                                      </Draggable>
+                                    );
+                                  })}
                                 {provided.placeholder}
                                 {slot.assigned.length === 0 && (
                                   <div style={{textAlign:'center',color:'#ccc',fontStyle:'italic',fontSize:'0.7rem',padding:'4px'}}>

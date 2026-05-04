@@ -1,0 +1,740 @@
+﻿{
+    "value":  [
+                  {
+                      "id":  "1EczLVsMg0nRtUWN6q4D",
+                      "dolgozoId":  "2rKf4Q2C9Plb6cg2yNg1",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "2PrZpDPygq3tjwlCBh5T",
+                      "dolgozoId":  "zmTNjdEd7chw0Nwdbtnq",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "3IXdk7hIlOYgNRCKAkXl",
+                      "dolgozoId":  "6a8xLM7tyq2vhaP372Kt",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "6yVpVpkxqRf1Kxg2yE4B",
+                      "dolgozoId":  "zmTNjdEd7chw0Nwdbtnq",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "7ZKzUo2hONAfVWNxElPA",
+                      "dolgozoId":  "hxIbIm17ONQA2MefNto0",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "7eLgWsdPC4lSE0DosNl0",
+                      "dolgozoId":  "z3n5iczAtjnte5nVQnFJ",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "8CjZLs3b81VtC8YdSOeG",
+                      "dolgozoId":  "YMIchizNWlyjEo0NE0LK",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "9AQJwiEljMSF6GWbhi6c",
+                      "dolgozoId":  "zmTNjdEd7chw0Nwdbtnq",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "9WtiytaCwpTFP0a5yE4u",
+                      "dolgozoId":  "7fKlOvpsWFoUdO0DRt4I",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "AENnoRPZashtuRSZc4J4",
+                      "dolgozoId":  "2rKf4Q2C9Plb6cg2yNg1",
+                      "nap":  "Vasárnap",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "AWiocZGXQ9koFYwl03Sa",
+                      "dolgozoId":  "k1fnaK4MR5vZM32A1wmM",
+                      "nap":  "Csütörtök",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "AyKH8ZdWVIE2PklFdi7Q",
+                      "dolgozoId":  "Z3Ib7B5Np8UQhB8FaFLf",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "BAEmvrzXNyiubDm96aMs",
+                      "dolgozoId":  "6a8xLM7tyq2vhaP372Kt",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "BFmbmxU3VUSee7wmkScm",
+                      "dolgozoId":  "z3n5iczAtjnte5nVQnFJ",
+                      "nap":  "Vasárnap",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "BZiAXmn7RbkxiTtZWQBo",
+                      "dolgozoId":  "hxIbIm17ONQA2MefNto0",
+                      "nap":  "Péntek",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "Bq1rP6beZM8J1hpeh7ni",
+                      "dolgozoId":  "qjZu5os5D7OqT0K0oPmv",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "CMWv8kCf4ORRObK6QeFm",
+                      "dolgozoId":  "Z3Ib7B5Np8UQhB8FaFLf",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "Clk9kgQIgKdYDDqnfZQH",
+                      "dolgozoId":  "k1fnaK4MR5vZM32A1wmM",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "DjmaYhpQhGWG2XzuVBC5",
+                      "dolgozoId":  "Z3Ib7B5Np8UQhB8FaFLf",
+                      "nap":  "Kedd",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "FIsQsD4OQ5l1vcJJ3hDz",
+                      "dolgozoId":  "OFdmTe0aDhva2dDzXqo9",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "FXQaIz3q9vFexrncFO1E",
+                      "dolgozoId":  "CmIkR7b98Q81HGwvYpdC",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "FpOJzKYiLMbiuyJeMdvB",
+                      "dolgozoId":  "OFdmTe0aDhva2dDzXqo9",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "FpZeraNQgn4VVtcisZcu",
+                      "dolgozoId":  "qjZu5os5D7OqT0K0oPmv",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "GnEQkmX1fXUkDKCFyEPO",
+                      "dolgozoId":  "k1fnaK4MR5vZM32A1wmM",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "HMMlQD8DNCGwOjkH6ldz",
+                      "dolgozoId":  "Rp9xuLqctOEUE4hES4o5",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "HezROctQbYSXD6KgVZEW",
+                      "dolgozoId":  "CmIkR7b98Q81HGwvYpdC",
+                      "nap":  "Vasárnap",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "IEuwWjcR0lueYTyn0wvt",
+                      "dolgozoId":  "Rp9xuLqctOEUE4hES4o5",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "ILAzGhO4SCmAymAFqhBI",
+                      "dolgozoId":  "6a8xLM7tyq2vhaP372Kt",
+                      "nap":  "Szombat",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "JTN0Q5UN4XrVqPjkFLgw",
+                      "dolgozoId":  "Z3Ib7B5Np8UQhB8FaFLf",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "JmOYbptRdJ0BDKMCES3m",
+                      "dolgozoId":  "ztt6DfpDKebxS3e146u9",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "K4lp0tJgcD5eKe7EUPg2",
+                      "dolgozoId":  "QHA3QP64T89WMvKSE84W",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "KsFWiw0pJ6Pio3MqiZ5m",
+                      "dolgozoId":  "ztt6DfpDKebxS3e146u9",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "KxqPbyqL70IlWmAtTt07",
+                      "dolgozoId":  "7fKlOvpsWFoUdO0DRt4I",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "OS857qX4AT8j0JDgssXk",
+                      "dolgozoId":  "CmIkR7b98Q81HGwvYpdC",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "OfZqVQ6K2oeEbxcyRhUN",
+                      "dolgozoId":  "OFdmTe0aDhva2dDzXqo9",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "PCLy6AINwY9fQAyLJl1U",
+                      "dolgozoId":  "7fKlOvpsWFoUdO0DRt4I",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "QOe0sN2TfUmPFVGxAPYq",
+                      "dolgozoId":  "ztt6DfpDKebxS3e146u9",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "QTUnvMDbnosuCneEm3Nf",
+                      "dolgozoId":  "7fKlOvpsWFoUdO0DRt4I",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "Qn0KIG4JfFUsYJHv1Zli",
+                      "dolgozoId":  "zmTNjdEd7chw0Nwdbtnq",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "R3JNwPpm9b8jbSnmCuB3",
+                      "dolgozoId":  "ztt6DfpDKebxS3e146u9",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "RHfTmv8p8pV8t13Yl8x6",
+                      "dolgozoId":  "CmIkR7b98Q81HGwvYpdC",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "RrfHz58pmICa4aZ6F9S9",
+                      "dolgozoId":  "2rKf4Q2C9Plb6cg2yNg1",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "TMvlbBekw47XQoiUNtsn",
+                      "dolgozoId":  "ztt6DfpDKebxS3e146u9",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "TxGvyLnOoWrTbXWQDRWX",
+                      "dolgozoId":  "z3n5iczAtjnte5nVQnFJ",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "U2ULpulJKWTqskS8v47R",
+                      "dolgozoId":  "zmTNjdEd7chw0Nwdbtnq",
+                      "nap":  "Szerda",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "UIjW1HyJeWgMelyKJ4Nu",
+                      "dolgozoId":  "YMIchizNWlyjEo0NE0LK",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "UOaKgcpkIE0FIbzuIG6t",
+                      "dolgozoId":  "QHA3QP64T89WMvKSE84W",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "UlcXvNT8hRvrjv37S5NX",
+                      "dolgozoId":  "k1fnaK4MR5vZM32A1wmM",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "VP0gYtVyfXjf8NphPGQe",
+                      "dolgozoId":  "z3n5iczAtjnte5nVQnFJ",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "VTQI0L7vDyqwThtLus7i",
+                      "dolgozoId":  "qjZu5os5D7OqT0K0oPmv",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "VpiSTt1mdEJfS0E7oRBS",
+                      "dolgozoId":  "qjZu5os5D7OqT0K0oPmv",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "VsLorCPCLqYA7NhsFutm",
+                      "dolgozoId":  "Rp9xuLqctOEUE4hES4o5",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "W3vpoWZTf5oUTdYCyvOd",
+                      "dolgozoId":  "qjZu5os5D7OqT0K0oPmv",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "WqrIjtKuAPMepjHfrTNx",
+                      "dolgozoId":  "Z3Ib7B5Np8UQhB8FaFLf",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "XT0xKFDAUSMik28k3mas",
+                      "dolgozoId":  "OFdmTe0aDhva2dDzXqo9",
+                      "nap":  "Vasárnap",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "XXZwe1ZROxByKFsQxEOJ",
+                      "dolgozoId":  "6a8xLM7tyq2vhaP372Kt",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "Xmc5yPppkbrk1v4RBtEM",
+                      "dolgozoId":  "6a8xLM7tyq2vhaP372Kt",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "Y2Q4SMfyz9Bh2Fc8jIO6",
+                      "dolgozoId":  "hxIbIm17ONQA2MefNto0",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "Y9x4JtYP1BlsDdjswOZQ",
+                      "dolgozoId":  "CmIkR7b98Q81HGwvYpdC",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "YJS4etWNOQjJ8nmSbs1u",
+                      "dolgozoId":  "7fKlOvpsWFoUdO0DRt4I",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "YmFDiP558RA0NQqT4ogl",
+                      "dolgozoId":  "Rp9xuLqctOEUE4hES4o5",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "ZDJHKC8hUYGz8NBG8sCW",
+                      "dolgozoId":  "QHA3QP64T89WMvKSE84W",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "bzzkVGxcHfNm2SBHEwKe",
+                      "dolgozoId":  "z3n5iczAtjnte5nVQnFJ",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "cNy1JdyOk2qdrWE9z4gY",
+                      "dolgozoId":  "YMIchizNWlyjEo0NE0LK",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "ceTO6y1AFyXn88BYWZFk",
+                      "dolgozoId":  "zmTNjdEd7chw0Nwdbtnq",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "e6fnAoIcF8zRbhHIadC9",
+                      "dolgozoId":  "Z3Ib7B5Np8UQhB8FaFLf",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "e71LVaalTrwc8a3T5kvV",
+                      "dolgozoId":  "QHA3QP64T89WMvKSE84W",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "eSfSWblPCpR2cW8zaUdG",
+                      "dolgozoId":  "Rp9xuLqctOEUE4hES4o5",
+                      "nap":  "Szombat",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "eer37Cdz933EBaFBsA6w",
+                      "dolgozoId":  "qjZu5os5D7OqT0K0oPmv",
+                      "nap":  "Csütörtök",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "gErmnUKD7HezuUTHLdnr",
+                      "dolgozoId":  "OFdmTe0aDhva2dDzXqo9",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "gnbiyIlffIXsuzMQAIjA",
+                      "dolgozoId":  "Rp9xuLqctOEUE4hES4o5",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "h2a5KYre2bI6SFATvbmE",
+                      "dolgozoId":  "k1fnaK4MR5vZM32A1wmM",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "hg1hUrH9KYbq2h4l83oL",
+                      "dolgozoId":  "OFdmTe0aDhva2dDzXqo9",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "ifX0fpWKIIlbXajLozDu",
+                      "dolgozoId":  "YMIchizNWlyjEo0NE0LK",
+                      "nap":  "Péntek",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "iiwCdgPQbxMPWqmlaywv",
+                      "dolgozoId":  "2rKf4Q2C9Plb6cg2yNg1",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "ijTCDwjdceypWX74ciug",
+                      "dolgozoId":  "k1fnaK4MR5vZM32A1wmM",
+                      "nap":  "Szerda",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "izKjYsWH1SYtVr8yXdWK",
+                      "dolgozoId":  "Rp9xuLqctOEUE4hES4o5",
+                      "nap":  "Vasárnap",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "jtw8PbSW3asPQEPqpAAf",
+                      "dolgozoId":  "7fKlOvpsWFoUdO0DRt4I",
+                      "nap":  "Hétfő",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "kJhhXHiVEC4pRem42xfX",
+                      "dolgozoId":  "QHA3QP64T89WMvKSE84W",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "kScrCWyAaXWfBPklySG3",
+                      "dolgozoId":  "2rKf4Q2C9Plb6cg2yNg1",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "kr0qFZDCrH5lThCO8vFY",
+                      "dolgozoId":  "YMIchizNWlyjEo0NE0LK",
+                      "nap":  "Kedd",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "llzKFfe1qqQvviKh9TCF",
+                      "dolgozoId":  "QHA3QP64T89WMvKSE84W",
+                      "nap":  "Vasárnap",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "lzuxdNjxmqWpUXjtu1TI",
+                      "dolgozoId":  "6a8xLM7tyq2vhaP372Kt",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "nqFgPtxlgxHUpfniT9Rj",
+                      "dolgozoId":  "qjZu5os5D7OqT0K0oPmv",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "oAZLqOxiHSodXUvpDdsR",
+                      "dolgozoId":  "2rKf4Q2C9Plb6cg2yNg1",
+                      "nap":  "Szombat",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "oCmJzfN8TqJX25D18p6o",
+                      "dolgozoId":  "hxIbIm17ONQA2MefNto0",
+                      "nap":  "Csütörtök",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "oKowXkKzcGmC0zneZ5rv",
+                      "dolgozoId":  "2rKf4Q2C9Plb6cg2yNg1",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "oyT4LkHvOzDuTtqkjPoU",
+                      "dolgozoId":  "YMIchizNWlyjEo0NE0LK",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "qWKfExHfWQn7z1LDpWYc",
+                      "dolgozoId":  "hxIbIm17ONQA2MefNto0",
+                      "nap":  "Szombat",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "qps6HNi8QAgDSNhh6km1",
+                      "dolgozoId":  "7fKlOvpsWFoUdO0DRt4I",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "r7nJSh3fyD4BwHKizxpV",
+                      "dolgozoId":  "CmIkR7b98Q81HGwvYpdC",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "rHcbqRDTqMuc4vl3OgUl",
+                      "dolgozoId":  "YMIchizNWlyjEo0NE0LK",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "sbNBkGIvfuuq735SUNVt",
+                      "dolgozoId":  "k1fnaK4MR5vZM32A1wmM",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "tCTuh1zl3gd2cFbrfqHq",
+                      "dolgozoId":  "ztt6DfpDKebxS3e146u9",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "u3IMQWSyKgbFnru6e0pE",
+                      "dolgozoId":  "ztt6DfpDKebxS3e146u9",
+                      "nap":  "Hétfő",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "up1lqz9BpJpyyrOSozuh",
+                      "dolgozoId":  "z3n5iczAtjnte5nVQnFJ",
+                      "nap":  "Szerda",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "vQA1oMmm54qNZ67SHt6C",
+                      "dolgozoId":  "QHA3QP64T89WMvKSE84W",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "vS3qeDSrpmc3c72za7Dm",
+                      "dolgozoId":  "OFdmTe0aDhva2dDzXqo9",
+                      "nap":  "Szombat",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "wLfR1RDjTZREdtQbqNB9",
+                      "dolgozoId":  "z3n5iczAtjnte5nVQnFJ",
+                      "nap":  "Péntek",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "wOKy0ADYaSGvstTaYTja",
+                      "dolgozoId":  "zmTNjdEd7chw0Nwdbtnq",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "wxjN259IhZJksfsIQort",
+                      "dolgozoId":  "CmIkR7b98Q81HGwvYpdC",
+                      "nap":  "Szombat",
+                      "elerheto":  false,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "x2dLJMlT4RshjKAqo3P9",
+                      "dolgozoId":  "hxIbIm17ONQA2MefNto0",
+                      "nap":  "Kedd",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "yzxYfCYXMiRBNPOIu6ud",
+                      "dolgozoId":  "hxIbIm17ONQA2MefNto0",
+                      "nap":  "Vasárnap",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "z1oGmH7ZjzBhy09ezujb",
+                      "dolgozoId":  "Z3Ib7B5Np8UQhB8FaFLf",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  },
+                  {
+                      "id":  "zI2rD01T5E6kHx99vft6",
+                      "dolgozoId":  "6a8xLM7tyq2vhaP372Kt",
+                      "nap":  "Hétfő",
+                      "elerheto":  true,
+                      "megjegyzes":  ""
+                  }
+              ],
+    "Count":  105
+}

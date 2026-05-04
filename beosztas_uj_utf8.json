@@ -1,0 +1,255 @@
+﻿{
+    "id":  "p51NtNS6WjBnfHuWXlCw",
+    "het":  "2026-W19",
+    "allapot":  "Tervezet (Tökéletes)",
+    "letrehozva":  {
+
+                   },
+    "reszletek":  [
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "FbgW6FOSCOBRxQh47foq",
+                          "dolgozoId":  "LfARzCXQKZrpCWCw7E0c",
+                          "nap":  "Hétfő"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "XHnTBAHz1LOToy4bbYor",
+                          "dolgozoId":  "qrhSRXZ0CVTM9XcM6jND",
+                          "nap":  "Hétfő"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "hIEHLJ6jm8RFafv8XGcB",
+                          "dolgozoId":  "JmyWnnKzHTPWTSX8JSRG",
+                          "nap":  "Hétfő"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "uEEel6yjZKJBeAJw9Elg",
+                          "dolgozoId":  "RJVtzwuA0A6GUbs6b7X5",
+                          "nap":  "Hétfő"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "zZ8b3N10Y7lrYUhTFw1C",
+                          "dolgozoId":  "IAhawOdKw6TtK8o8RmPS",
+                          "nap":  "Hétfő"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "FR3A4hLeZzgha2jpUBxK",
+                          "dolgozoId":  "GpUBZpzPbrPWTwkLOcqa",
+                          "nap":  "Kedd"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "J7vUi6hCqlh1UQdHsSEw",
+                          "dolgozoId":  "khYJSrAqsPvzG2SxSlVm",
+                          "nap":  "Kedd"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "mUo1XBOcVBujj8EdwVLz",
+                          "dolgozoId":  "fS7oXS9oksyj1tRF7fhy",
+                          "nap":  "Kedd"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "pzi98kSLVTA1bLHSVYVy",
+                          "dolgozoId":  "JmyWnnKzHTPWTSX8JSRG",
+                          "nap":  "Kedd"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "q3OeAFPUHKmf2fuL7tJX",
+                          "dolgozoId":  "RgRSsEywh64IRM3fnYXG",
+                          "nap":  "Kedd"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "AKpph2eE8HjALX90GT2N",
+                          "dolgozoId":  "LfARzCXQKZrpCWCw7E0c",
+                          "nap":  "Szerda"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "HmJju5AdTtSAR9TIxUKg",
+                          "dolgozoId":  "GpUBZpzPbrPWTwkLOcqa",
+                          "nap":  "Szerda"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "a5oVx09Sf7YEYrxRJySa",
+                          "dolgozoId":  "tgZkjBQzoAo3ZSI59G0t",
+                          "nap":  "Szerda"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "rYSbz9hTp5LkKxh8reVT",
+                          "dolgozoId":  "fS7oXS9oksyj1tRF7fhy",
+                          "nap":  "Szerda"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "yJo2F0pw4XTqMQI8OmZx",
+                          "dolgozoId":  "X98Yb0qNqOi138QShTul",
+                          "nap":  "Szerda"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "O4PMmlAyAXuEzciih7cz",
+                          "dolgozoId":  "RJVtzwuA0A6GUbs6b7X5",
+                          "nap":  "Csütörtök"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "iOX0vUNMobfI1hCAKVOM",
+                          "dolgozoId":  "GpUBZpzPbrPWTwkLOcqa",
+                          "nap":  "Csütörtök"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "jDOfrS6VbbrlglziRP8r",
+                          "dolgozoId":  "X98Yb0qNqOi138QShTul",
+                          "nap":  "Csütörtök"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "lSOMXNWpsmIOlIFBrhaB",
+                          "dolgozoId":  "qrhSRXZ0CVTM9XcM6jND",
+                          "nap":  "Csütörtök"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "w5zM1Rfj58Uv8YG19998",
+                          "dolgozoId":  "V53rDzym0aKNnOiC9Fqp",
+                          "nap":  "Csütörtök"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "9P4JPVdpnDuUfxIk3NXV",
+                          "dolgozoId":  "khYJSrAqsPvzG2SxSlVm",
+                          "nap":  "Péntek"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "MuhnAvneWY6uBeyxrwWn",
+                          "dolgozoId":  "JmyWnnKzHTPWTSX8JSRG",
+                          "nap":  "Péntek"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "OV4WC9usGciKvcsGfIfu",
+                          "dolgozoId":  "GpUBZpzPbrPWTwkLOcqa",
+                          "nap":  "Péntek"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "X2bpfWVREMSZMowFXdfC",
+                          "dolgozoId":  "fS7oXS9oksyj1tRF7fhy",
+                          "nap":  "Péntek"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "tjyWZdESgLRR2MKCx21n",
+                          "dolgozoId":  "RgRSsEywh64IRM3fnYXG",
+                          "nap":  "Péntek"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "5YH032gSZMIawUFngbGg",
+                          "dolgozoId":  "GpUBZpzPbrPWTwkLOcqa",
+                          "nap":  "Szombat"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "7J4L1kJVrUvWkfZkP9I4",
+                          "dolgozoId":  "fS7oXS9oksyj1tRF7fhy",
+                          "nap":  "Szombat"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "bg57yJfGaUgyzjBnWXeN",
+                          "dolgozoId":  "tgZkjBQzoAo3ZSI59G0t",
+                          "nap":  "Szombat"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "jlKFkzKLLdqcrAlUHiPE",
+                          "dolgozoId":  "X98Yb0qNqOi138QShTul",
+                          "nap":  "Szombat"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "uqA9vDUsoc5Kvaoz3Z26",
+                          "dolgozoId":  "V53rDzym0aKNnOiC9Fqp",
+                          "nap":  "Szombat"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "T98jD88SwdkVBlhWKWrc",
+                          "dolgozoId":  "khYJSrAqsPvzG2SxSlVm",
+                          "nap":  "Vasárnap"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "YdHIobFQ1QE3R21VYdza",
+                          "dolgozoId":  "X98Yb0qNqOi138QShTul",
+                          "nap":  "Vasárnap"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "cfDx8sntIHc5wPPNqbTu",
+                          "dolgozoId":  "tgZkjBQzoAo3ZSI59G0t",
+                          "nap":  "Vasárnap"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "iBVQVgyUZZpH6gW071oW",
+                          "dolgozoId":  "LfARzCXQKZrpCWCw7E0c",
+                          "nap":  "Vasárnap"
+                      },
+                      {
+                          "id":  null,
+                          "beosztasId":  "",
+                          "muszakId":  "udxxzMrGuYO3lPFzCePq",
+                          "dolgozoId":  "qrhSRXZ0CVTM9XcM6jND",
+                          "nap":  "Vasárnap"
+                      }
+                  ]
+}

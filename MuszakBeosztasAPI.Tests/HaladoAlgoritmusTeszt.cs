@@ -27,11 +27,16 @@ namespace MuszakBeosztasAPI.Tests
             var hetiOrak = new Dictionary<string, int> { { "d1", 8 } };
             var elerhetosegek = new List<Elerhetoseg> { new Elerhetoseg { DolgozoId = "d1", Nap = "Kedd", Elerheto = true } };
 
+            var slotok = new List<(Muszak muszak, string nap)>
+            {
+                (new Muszak { Id = "m_ejszaka", Megnevezes = "Éjszaka", Kezdes = "22:00", Befejezes = "06:00" }, "Hétfő")
+            };
+
             // Act - A private "ValidE" metódus meghívása reflexióval
             MethodInfo validEMethod = typeof(BeosztasService).GetMethod("ValidE", BindingFlags.NonPublic | BindingFlags.Instance);
             
-            // paraméterek: dolgozo, nap, muszak, elerhetosegek, hetiOrak, beosztas
-            object[] parameters = new object[] { dolgozo, "Kedd", maiMuszak, elerhetosegek, hetiOrak, elozoBeosztasok };
+            // paraméterek: dolgozo, nap, muszak, elerhetosegek, hetiOrak, beosztas, slotok
+            object[] parameters = new object[] { dolgozo, "Kedd", maiMuszak, elerhetosegek, hetiOrak, elozoBeosztasok, slotok };
             
             bool eredmeny = (bool)validEMethod.Invoke(service, parameters);
 
@@ -55,7 +60,7 @@ namespace MuszakBeosztasAPI.Tests
 
             // Act
             MethodInfo validEMethod = typeof(BeosztasService).GetMethod("ValidE", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas };
+            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas, null };
             bool eredmeny = (bool)validEMethod.Invoke(service, parameters);
 
             // Assert
@@ -80,7 +85,7 @@ namespace MuszakBeosztasAPI.Tests
 
             // Act
             MethodInfo validEMethod = typeof(BeosztasService).GetMethod("ValidE", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas };
+            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas, null };
             bool eredmeny = (bool)validEMethod.Invoke(service, parameters);
 
             // Assert
@@ -105,7 +110,7 @@ namespace MuszakBeosztasAPI.Tests
 
             // Act
             MethodInfo validEMethod = typeof(BeosztasService).GetMethod("ValidE", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas };
+            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas, null };
             bool eredmeny = (bool)validEMethod.Invoke(service, parameters);
 
             // Assert
@@ -133,7 +138,7 @@ namespace MuszakBeosztasAPI.Tests
 
             // Act
             MethodInfo validEMethod = typeof(BeosztasService).GetMethod("ValidE", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = new object[] { dolgozo, "Kedd", delutaniMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas };
+            object[] parameters = new object[] { dolgozo, "Kedd", delutaniMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas, null };
             bool eredmeny = (bool)validEMethod.Invoke(service, parameters);
 
             // Assert
@@ -156,7 +161,7 @@ namespace MuszakBeosztasAPI.Tests
 
             // Act
             MethodInfo validEMethod = typeof(BeosztasService).GetMethod("ValidE", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas };
+            object[] parameters = new object[] { dolgozo, "Kedd", ujMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas, null };
             bool eredmeny = (bool)validEMethod.Invoke(service, parameters);
 
             // Assert

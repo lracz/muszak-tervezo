@@ -161,7 +161,7 @@ function ElerhetosegKezelo({ dolgozok }) {
             <tbody>
               {megjelenitettElerhetosegek.map((e) => (
                 <tr key={e.id} className={e.elerheto ? "" : "nem-elerheto"}>
-                  {isHR && <td>{dolgozoNev(e.dolgozoId)}</td>}
+                  {isHR && <td>{e.dolgozoNev || dolgozoNev(e.dolgozoId)}</td>}
                   <td><strong>{e.nap}</strong></td>
                   <td>
                     <span className={`statusz-badge ${e.elerheto ? "elerheto" : "nem-elerheto-badge"}`}>

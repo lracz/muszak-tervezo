@@ -118,7 +118,7 @@ namespace MuszakBeosztasAPI.Services
 
             foreach (var dolgozo in rendezettDolgozok)
             {
-                if (ValidE(dolgozo, aktualisSlot.nap, aktualisMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas))
+                if (ValidE(dolgozo, aktualisSlot.nap, aktualisMuszak, elerhetosegek, hetiOrak, jelenlegiBeosztas, slotok))
                 {
                     // Lépés megtétele (Assign)
                     var ujReszlet = new BeosztasReszlet
@@ -168,7 +168,7 @@ namespace MuszakBeosztasAPI.Services
 
                 foreach (var dolgozo in rendezettDolgozok)
                 {
-                    if (ValidE(dolgozo, slot.nap, aktualisMuszak, elerhetosegek, hetiOrak, beosztasLista))
+                    if (ValidE(dolgozo, slot.nap, aktualisMuszak, elerhetosegek, hetiOrak, beosztasLista, slotok))
                     {
                         var ujReszlet = new BeosztasReszlet
                         {
@@ -191,7 +191,7 @@ namespace MuszakBeosztasAPI.Services
         }
 
         // Hard Constraints ellenőrzése
-        private bool ValidE(Dolgozo dolgozo, string nap, Muszak muszak, List<Elerhetoseg> elerhetosegek, Dictionary<string, int> hetiOrak, List<BeosztasReszlet> beosztas)
+        private bool ValidE(Dolgozo dolgozo, string nap, Muszak muszak, List<Elerhetoseg> elerhetosegek, Dictionary<string, int> hetiOrak, List<BeosztasReszlet> beosztas, List<(Muszak muszak, string nap)> slotok = null)
         {
             // 1. Elérhetőség vizsgálata aznapra
             var elerhetoE = elerhetosegek.FirstOrDefault(e => e.DolgozoId == dolgozo.Id && e.Nap == nap);
@@ -210,22 +210,25 @@ namespace MuszakBeosztasAPI.Services
             // 5. Kötelező pihenőidő szabály: Ha előző nap éjszakai volt, ma nem lehet reggeli/délelőtt
             var napokSorrendje = new List<string> { "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap" };
             int maiIndex = napokSorrendje.IndexOf(nap);
-            if (maiIndex > 0)
+            if (maiIndex > 0 && slotok != null)
             {
                 string elozoNap = napokSorrendje[maiIndex - 1];
                 var tegnapiBeosztas = beosztas.FirstOrDefault(b => b.DolgozoId == dolgozo.Id && b.Nap == elozoNap);
                 if (tegnapiBeosztas != null)
                 {
-                    // Ha a mai műszak korán kezdődik, ellenőrizni kell a tegnapi zárást
-                    if (muszak.Megnevezes.Contains("Reggeli", StringComparison.OrdinalIgnoreCase) || 
-                        muszak.Megnevezes.Contains("Délelőtt", StringComparison.OrdinalIgnoreCase))
+                    var tegnapiMuszak = slotok.FirstOrDefault(s => s.muszak.Id == tegnapiBeosztas.MuszakId).muszak;
+                    if (tegnapiMuszak != null)
                     {
-                        // Egyszerűsített szabály: Ha a tegnapi műszak ID-ja tartalmazza az "ejszaka" vagy "este" szót, 
-                        // akkor ma nem mehet reggelre a pihenőidő miatt.
-                        if (tegnapiBeosztas.MuszakId.Contains("ejszaka", StringComparison.OrdinalIgnoreCase) || 
-                            tegnapiBeosztas.MuszakId.Contains("este", StringComparison.OrdinalIgnoreCase))
+                        // Ha a mai műszak korán kezdődik, ellenőrizni kell a tegnapi zárást
+                        if (muszak.Megnevezes.Contains("Reggel", StringComparison.OrdinalIgnoreCase) || 
+                            muszak.Megnevezes.Contains("Délelőtt", StringComparison.OrdinalIgnoreCase))
                         {
-                            return false; // Pihenőidő megsértése
+                            if (tegnapiMuszak.Megnevezes.Contains("éjszaka", StringComparison.OrdinalIgnoreCase) || 
+                                tegnapiMuszak.Megnevezes.Contains("ejszaka", StringComparison.OrdinalIgnoreCase) || 
+                                tegnapiMuszak.Megnevezes.Contains("Este", StringComparison.OrdinalIgnoreCase))
+                            {
+                                return false; // Pihenőidő megsértése
+                            }
                         }
                     }
                 }

@@ -13,7 +13,7 @@ namespace MuszakBeosztasAPI.Controllers
         [HttpPost("run")]
         public async Task<IActionResult> RunSeed()
         {
-            // 1. TELJES TÖRLÉS
+            // 1. ADATTISZTÍTÁS
             foreach (var col in new[] { "dolgozok", "muszakok", "elerhetosegek", "beosztasok" })
             {
                 var snap = await _db.Collection(col).GetSnapshotAsync();
@@ -23,58 +23,82 @@ namespace MuszakBeosztasAPI.Controllers
             var pw = BCrypt.Net.BCrypt.HashPassword("Munka1234");
             var dolgozokRef = _db.Collection("dolgozok");
             var muszakokRef = _db.Collection("muszakok");
+            var elerhetosegRef = _db.Collection("elerhetosegek");
 
-            // 2. DOLGOZÓK - 10 fő, egyértelmű pozíciókkal
-            var dolgozoIds = new Dictionary<string, string>(); // name -> id
+            // 2. DOLGOZÓK GENERÁLÁSA (30 fő)
+            var poziciok = new[] { "Szakács", "Pincér", "Pultos", "Vegyes" };
+            var keresztnevek = new[] { "Anna", "Béla", "Csaba", "Dóra", "Erik", "Fanni", "Gábor", "Hanna", "Iván", "Júlia", "Károly", "Lilla", "Márk", "Nóra", "Ottó", "Péter", "Róza", "Sándor", "Tímea", "Viktor" };
+            var vezeteknevek = new[] { "Kovács", "Nagy", "Szabó", "Tóth", "Varga", "Kiss", "Molnár", "Farkas", "Balogh", "Papp" };
 
-            var dolgozok = new (string nev, string poz, string szerep, int maxOra)[] {
-                ("Szakács Anna", "Szakács", "Dolgozo", 40),
-                ("Szakács Béla", "Szakács", "Dolgozo", 40),
-                ("Szakács Csaba", "Szakács", "Dolgozo", 40),
-                ("Pultos Dóra", "Pultos", "Dolgozo", 40),
-                ("Pultos Erik", "Pultos", "Dolgozo", 40),
-                ("Pultos Fanni", "Pultos", "Dolgozo", 40),
-                ("Pincér Gábor", "Pincér", "Dolgozo", 40),
-                ("Pincér Hanna", "Pincér", "Dolgozo", 40),
-                ("Pincér Iván", "Pincér", "Dolgozo", 40),
-                ("Admin Klára", "HR", "HR", 40),
-            };
+            var random = new Random();
+            var dolgozoIds = new List<string>();
 
-            foreach (var (nev, poz, szerep, maxOra) in dolgozok)
+            for (int i = 0; i < 30; i++)
             {
-                var docRef = await dolgozokRef.AddAsync(new Dictionary<string, object> {
-                    {"Nev", nev}, {"Email", nev.Replace(" ",".").ToLower()+"@ceg.hu"},
-                    {"Pozicio", poz}, {"Szerepkor", szerep}, {"Telefonszam", "+36301111111"},
-                    {"JelszoHash", pw}, {"MaxHetiOra", maxOra}
-                });
-                dolgozoIds[nev] = docRef.Id;
+                string nev = $"{vezeteknevek[random.Next(vezeteknevek.Length)]} {keresztnevek[random.Next(keresztnevek.Length)]} {i}";
+                string poz = poziciok[random.Next(poziciok.Length)];
+                
+                var dolgozoData = new Dictionary<string, object> {
+                    {"Nev", nev}, 
+                    {"Email", $"test{i}@ceg.hu"},
+                    {"Pozicio", poz}, 
+                    {"Szerepkor", i == 0 ? "HR" : "Dolgozo"}, 
+                    {"Telefonszam", "+36300000000"},
+                    {"JelszoHash", pw}, 
+                    {"MaxHetiOra", random.Next(20, 41)} // 20-40 óra közötti szerződések
+                };
+
+                var docRef = await dolgozokRef.AddAsync(dolgozoData);
+                dolgozoIds.Add(docRef.Id);
+
+                // Elérhetőség generálás (a legtöbb napon elérhető, de néha nem)
+                var napok = new[] { "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap" };
+                foreach (var nap in napok)
+                {
+                    bool elerheto = random.Next(100) > 15; // 85% eséllyel ráér
+                    await elerhetosegRef.AddAsync(new Dictionary<string, object> {
+                        {"DolgozoId", docRef.Id},
+                        {"DolgozoNev", nev}, // Beletesszük a nevet is a könnyebb megjelenítésért
+                        {"Nap", nap},
+                        {"Elerheto", elerheto}
+                    });
+                }
             }
 
-            // 3. MŰSZAKOK - CSAK Hétfő, egyszerű: 1 Szakács reggel, 1 Pultos reggel, 1 Pincér reggel
-            var muszakIds = new Dictionary<string, string>();
+            // 3. MŰSZAKOK GENERÁLÁSA (Minden napra 6 műszak)
+            var napokSorrendje = new[] { "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap" };
+            int muszakCount = 0;
 
-            var muszakok = new (string megn, string kezd, string bef, string nap, int letsz, string poz)[] {
-                ("Séf Reggel",    "08:00", "16:00", "Hétfő", 1, "Szakács"),
-                ("Pult Reggel",   "08:00", "16:00", "Hétfő", 1, "Pultos"),
-                ("Pincér Reggel", "08:00", "16:00", "Hétfő", 1, "Pincér"),
-                ("Séf Este",      "16:00", "00:00", "Hétfő", 1, "Szakács"),
-                ("Pult Este",     "16:00", "00:00", "Hétfő", 1, "Pultos"),
-                ("Pincér Este",   "16:00", "00:00", "Hétfő", 1, "Pincér"),
-            };
-
-            foreach (var (megn, kezd, bef, nap, letsz, poz) in muszakok)
+            foreach (var nap in napokSorrendje)
             {
-                var docRef = await muszakokRef.AddAsync(new Dictionary<string, object> {
-                    {"Megnevezes", megn}, {"Kezdes", kezd}, {"Befejezes", bef},
-                    {"Nap", nap}, {"SzuksegesLetszam", letsz}, {"Pozicio", poz}
-                });
-                muszakIds[megn] = docRef.Id;
+                var napiMuszakok = new[] {
+                    ("Konyha Reggel", "08:00", "16:00", 2, "Szakács"),
+                    ("Pult Reggel",   "08:00", "16:00", 1, "Pultos"),
+                    ("Placc Reggel",  "09:00", "17:00", 2, "Pincér"),
+                    ("Konyha Este",   "16:00", "00:00", 2, "Szakács"),
+                    ("Pult Este",     "16:00", "01:00", 2, "Pultos"),
+                    ("Placc Este",    "17:00", "01:00", 3, "Pincér")
+                };
+
+                foreach (var (megn, kezd, bef, letsz, poz) in napiMuszakok)
+                {
+                    await muszakokRef.AddAsync(new Dictionary<string, object> {
+                        {"Megnevezes", megn}, 
+                        {"Kezdes", kezd}, 
+                        {"Befejezes", bef},
+                        {"Nap", nap}, 
+                        {"SzuksegesLetszam", letsz}, 
+                        {"Pozicio", poz}
+                    });
+                    muszakCount++;
+                }
             }
 
             return Ok(new {
-                message = "TESZT seed kész: 10 dolgozó, 6 műszak (csak Hétfő)",
-                dolgozoIds,
-                muszakIds
+                message = "REÁLIS seed kész!",
+                dolgozokSzama = 30,
+                muszakokSzama = muszakCount,
+                admin = "test0@ceg.hu / Munka1234"
             });
         }
     }

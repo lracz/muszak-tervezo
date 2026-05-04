@@ -7,6 +7,7 @@ function MuszakForm({ mentesKezelo }) {
   const [befejezes, setBefejezes] = useState("14:00");
   const [nap, setNap] = useState("Hétfő");
   const [szuksegesLetszam, setSzuksegesLetszam] = useState(1);
+  const [pozicio, setPozicio] = useState("Vegyes");
   const [hibaUzenet, setHibaUzenet] = useState("");
 
   const napok = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
@@ -26,6 +27,7 @@ function MuszakForm({ mentesKezelo }) {
       befejezes,
       nap,
       szuksegesLetszam: parseInt(szuksegesLetszam) || 1,
+      pozicio: pozicio
     };
 
     try {
@@ -35,6 +37,7 @@ function MuszakForm({ mentesKezelo }) {
       setBefejezes("14:00");
       setNap("Hétfő");
       setSzuksegesLetszam(1);
+      setPozicio("Vegyes");
     } catch (hiba) {
       setHibaUzenet("Hiba történt a mentés során!");
     }
@@ -45,11 +48,23 @@ function MuszakForm({ mentesKezelo }) {
       <h2>🏭 Új műszak hozzáadása</h2>
       {hibaUzenet && <div className="hiba-uzenet">{hibaUzenet}</div>}
       <form onSubmit={urlapBekuldese}>
-        <div className="form-mezo">
-          <label htmlFor="megnevezes">Megnevezés *</label>
-          <input id="megnevezes" type="text" value={megnevezes}
-            onChange={(e) => setMegnevezes(e.target.value)}
-            placeholder="Pl. Reggeli műszak" />
+        <div className="form-sor">
+          <div className="form-mezo">
+            <label htmlFor="megnevezes">Megnevezés *</label>
+            <input id="megnevezes" type="text" value={megnevezes}
+              onChange={(e) => setMegnevezes(e.target.value)}
+              placeholder="Pl. Reggeli műszak" />
+          </div>
+          <div className="form-mezo">
+            <label htmlFor="pozicio">Szükséges pozíció</label>
+            <select id="pozicio" value={pozicio} onChange={(e) => setPozicio(e.target.value)} className="form-select">
+              <option value="Szakács">👨‍🍳 Szakács</option>
+              <option value="Pincér">🍽️ Pincér</option>
+              <option value="Pultos">🍸 Pultos</option>
+              <option value="Konyhai kisegítő">🧼 Konyhai kisegítő</option>
+              <option value="Vegyes">🔄 Vegyes / Általános</option>
+            </select>
+          </div>
         </div>
         <div className="form-sor">
           <div className="form-mezo">

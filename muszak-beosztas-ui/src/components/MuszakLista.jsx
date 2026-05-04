@@ -29,6 +29,7 @@ function MuszakLista({ muszakok, torlesKezelo, betoltes }) {
         <thead>
           <tr>
             <th>Megnevezés</th>
+            <th>Pozíció</th>
             <th>Nap</th>
             <th>Kezdés</th>
             <th>Befejezés</th>
@@ -40,6 +41,7 @@ function MuszakLista({ muszakok, torlesKezelo, betoltes }) {
           {muszakok.map((muszak) => (
             <tr key={muszak.id} className={muszakSzin(muszak.megnevezes)}>
               <td><strong>{muszak.megnevezes}</strong></td>
+              <td><span className="statusz-badge elerheto">{muszak.pozicio || "Vegyes"}</span></td>
               <td>{muszak.nap}</td>
               <td>{muszak.kezdes}</td>
               <td>{muszak.befejezes}</td>

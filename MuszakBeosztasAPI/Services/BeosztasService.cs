@@ -216,28 +216,32 @@ namespace MuszakBeosztasAPI.Services
                 var tegnapiBeosztas = beosztas.FirstOrDefault(b => b.DolgozoId == dolgozo.Id && b.Nap == elozoNap);
                 if (tegnapiBeosztas != null)
                 {
-                    // Ha a tegnapi műszak "Éjszakai" volt, és a mai "Reggeli" vagy "Délelőtt", akkor elutasítjuk
+                    // Ha a mai műszak korán kezdődik, ellenőrizni kell a tegnapi zárást
                     if (muszak.Megnevezes.Contains("Reggeli", StringComparison.OrdinalIgnoreCase) || 
                         muszak.Megnevezes.Contains("Délelőtt", StringComparison.OrdinalIgnoreCase))
                     {
-                        // TODO: Ideális esetben a tegnapi Muszak entitást be kéne tölteni a nevének ellenőrzéséhez. 
-                        // A backtracker paraméterezésénél egyelőre a tegnap beosztott dolgozók ellenőrzését egyszerűen megoldjuk:
-                        // Ha tegnap be volt osztva és az éjszakai volt...
-                        return true; // Ide most ideiglenesen truest adunk amíg a memóriában nem kötjük össze, de a szabály implementálva lett logika szinten.
+                        // Egyszerűsített szabály: Ha a tegnapi műszak ID-ja tartalmazza az "ejszaka" vagy "este" szót, 
+                        // akkor ma nem mehet reggelre a pihenőidő miatt.
+                        if (tegnapiBeosztas.MuszakId.Contains("ejszaka", StringComparison.OrdinalIgnoreCase) || 
+                            tegnapiBeosztas.MuszakId.Contains("este", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return false; // Pihenőidő megsértése
+                        }
                     }
                 }
             }
 
-
-            // 6. Pozíció (Munkakör) vizsgálata
+            // 6. Pozíció (Munkakör) vizsgálata - SZIGORÚ ELLENŐRZÉS
             bool isMuszakVegyes = string.IsNullOrEmpty(muszak.Pozicio) || muszak.Pozicio.Equals("Vegyes", StringComparison.OrdinalIgnoreCase);
             bool isDolgozoVegyes = string.IsNullOrEmpty(dolgozo.Pozicio) || dolgozo.Pozicio.Equals("Vegyes", StringComparison.OrdinalIgnoreCase);
 
-            if (!isMuszakVegyes && !isDolgozoVegyes)
+            // Ha a műszak specifikus (nem vegyes)
+            if (!isMuszakVegyes)
             {
-                if (!muszak.Pozicio.Equals(dolgozo.Pozicio, StringComparison.OrdinalIgnoreCase))
+                // Akkor vagy a dolgozónak kell ugyanabban a pozícióban lennie, vagy Vegyesnek kell lennie
+                if (!isDolgozoVegyes && !muszak.Pozicio.Equals(dolgozo.Pozicio, StringComparison.OrdinalIgnoreCase))
                 {
-                    return false;
+                    return false; // Pozíció mismatch
                 }
             }
 

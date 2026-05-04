@@ -23,5 +23,8 @@ namespace MuszakBeosztasAPI.Models
 
         [FirestoreProperty]
         public int SzuksegesLetszam { get; set; } = 1;
+
+        [FirestoreProperty]
+        public string Pozicio { get; set; } = "Vegyes";
     }
 }

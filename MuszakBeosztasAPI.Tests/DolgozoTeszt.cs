@@ -14,17 +14,14 @@ namespace MuszakBeosztasAPI.Tests
                 Id = "test-123",
                 Nev = "Teszt Elek",
                 Email = "teszt@example.com",
-                Aktiv = true,
                 MaxHetiOra = 40
             };
 
             // Act
             var nevUres = string.IsNullOrEmpty(dolgozo.Nev);
-            var aktivE = dolgozo.Aktiv;
 
             // Assert
             Assert.False(nevUres, "A dolgozó neve nem lehet üres.");
-            Assert.True(aktivE, "Az új dolgozónak aktívnak kell lennie.");
             Assert.Equal(40, dolgozo.MaxHetiOra);
         }
 

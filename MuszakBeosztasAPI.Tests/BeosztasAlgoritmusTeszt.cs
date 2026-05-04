@@ -63,7 +63,7 @@ namespace MuszakBeosztasAPI.Tests
             var beosztas = new Beosztas
             {
                 Het = "2026-W19",
-                KeszitesIdeje = System.DateTime.UtcNow,
+                Letrehozva = Google.Cloud.Firestore.Timestamp.GetCurrentTimestamp(),
                 Allapot = "Tervezet"
             };
 

@@ -296,10 +296,19 @@ function BeosztasNezet({ dolgozok, muszakok }) {
                 width:'280px',backgroundColor:'#f8f9fa',padding:'15px',borderRadius:'12px',
                 border:'1px solid #e0e0e0',position:'sticky',top:'20px',maxHeight:'85vh',overflowY:'auto'
               }}>
-                        backgroundColor:kvotaSortBy===k?'#4a90e2':'white',
-                        color:kvotaSortBy===k?'white':'#666',cursor:'pointer',fontWeight:'600'
-                      }}>{l}</button>
-                  ))}
+                <div style={{marginBottom:'15px'}}>
+                  <h3 style={{fontSize:'1rem',marginBottom:'10px',color:'#2c3e50'}}>👥 Dolgozói kvóta</h3>
+                  <div style={{display:'flex',gap:'5px',marginBottom:'10px'}}>
+                    {[{k:"nev",l:"Név"},{k:"pozicio",l:"Pozíció"},{k:"maradt",l:"Hátralék"}].map(({k,l})=>(
+                      <button key={k} onClick={()=>setKvotaSortBy(k)}
+                        style={{
+                          padding:'3px 8px',fontSize:'0.7rem',borderRadius:'4px',border:'1px solid #ddd',
+                          backgroundColor:kvotaSortBy===k?'#4a90e2':'white',
+                          color:kvotaSortBy===k?'white':'#666',cursor:'pointer',fontWeight:'600'
+                        }}>{l}</button>
+                    ))}
+                  </div>
+                  <p style={{fontSize:'0.75rem',color:'#666'}}>Húzd a dolgozókat a műszakokba!</p>
                 </div>
                 <Droppable droppableId="kvota-sidebar" isDropDisabled={!isDragEnabled}>
                   {(provided) => (

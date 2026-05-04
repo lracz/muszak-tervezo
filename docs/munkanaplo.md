@@ -165,3 +165,49 @@
 
 **Sprint Review:** Az alkalmazás hitelesítése immáron vállalati szintű. A Token-ek lopásának kockázata minimális a 15 perces lejárattal, a Rate Limiting pedig véd az esetleges bot támadások ellen. A React kliens transzparensen újítja meg a tokeneket, így a UX továbbra is kiváló.
 **Retrospective:** A .NET 8 beépített Rate Limiter-e rendkívül gyorsan bevezethetővé tette ezt az iparági védelmet.
+
+---
+
+## Sprint 10 – Zero-Trust Networking (Élesítés)
+
+**Cél:** Az alkalmazás biztonságos kihelyezése a nyílt internetre port nyitás nélkül.
+
+| # | Feladat | Státusz |
+|---|---|---|
+| 10.1 | Cloudflare Tunnel daemon (cloudflared) beállítása | ✅ |
+| 10.2 | Zero-Trust házirend kialakítása | ✅ |
+
+**Sprint Review:** A rendszer a Cloudflare hálózatán keresztül lett publikálva, így a szerver rejtve marad az internet elől (DDoS védelem, SSL biztosítva).
+
+---
+
+## Sprint 11 – Algoritmus Fagyás Védelem és Munkakörök
+
+**Cél:** Az NP-nehéz probléma (szerver kifagyás) végleges megoldása és szigorú "Munkakör" alapú ütemezés bevezetése.
+
+| # | Feladat | Státusz |
+|---|---|---|
+| 11.1 | `CancellationToken` bevezetése az algoritmusba (5 másodperces Timeout) | ✅ |
+| 11.2 | Mohó (Greedy) vészhelyzeti Fallback megírása részleges eredmény kiadására | ✅ |
+| 11.3 | Állapotkövetés UI-on: "Tervezet (Tökéletes)" vs "Tervezet (Hiányos / Greedy)" | ✅ |
+| 11.4 | Hard Constraint (6-os szabály): A műszak "Pozíciója" és a dolgozó "Pozíciója" egyezni kell | ✅ |
+| 11.5 | Jolly Joker (Vegyes) munkakörök és műszakok globális kezelése | ✅ |
+
+**Sprint Review:** A rendszer most már ipari sztenderdek szerint működik. Lehetetlen peremfeltételek (pl. túl kevés ember) esetén is ad részleges, használható eredményt ahelyett, hogy végtelen ciklusba fagyna!
+
+---
+
+## Sprint 12 – Interaktív UI és Dolgozói Felület
+
+**Cél:** A generált beosztások emberi felülbírálatának biztosítása, illetve a normál dolgozók "Szabadságigénylő" felületének kidolgozása.
+
+| # | Feladat | Státusz |
+|---|---|---|
+| 12.1 | `@hello-pangea/dnd` beépítése a React Frontendbe | ✅ |
+| 12.2 | Beosztásnézet refaktorálása: Húzd-és-Ejtsd (Drag & Drop) "Puzzle" szerkesztő | ✅ |
+| 12.3 | `PUT /api/beosztas/{id}/modosit` végpont (Módosítás mentése az adatbázisba) | ✅ |
+| 12.4 | Szerepkör alapú UI korlátozás bevezetése a Szabadságigénylőnél | ✅ |
+| 12.5 | Éves Szabadság Keret indikátor beépítése a normál dolgozóknak | ✅ |
+
+**Sprint Review:** Hatalmas UX (User Experience) mérföldkő. A HR most már szabadon mozgathatja a dolgozókat a műszakok között (Override). A dolgozók egy dedikált felületen jelezhetik, hogy mikor nem érnek rá, ami automatikusan vizuálisan követi a felhasználható (éves) szabadnapok számát.
+**Retrospective:** Ezzel a lépéssel a projekt egy komplett, funkciókban gazdag, termelésre érett szoftverré nőtte ki magát.

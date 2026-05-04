@@ -15,7 +15,7 @@ Egy webes alkalmazás, amely segíti a munkáltatókat a dolgozók műszakbeoszt
 ---
 
 ## 📸 Képernyőfotók
-*Helyezz ide képernyőfotókat az elkészült UI-ról a beadás előtt! (pl. `![Login](./docs/images/ui-login.png)`)*
+![Műszak Tervező UI](./docs/images/ui-screenshot.png)
 
 ## ⚙️ Technológiai Stack
 - **Backend:** C# .NET 8 Web API
@@ -71,16 +71,19 @@ A frontend az `http://localhost:5173`, a backend a `http://localhost:8080` címe
 - [x] Sprint 8: Szerepkör-alapú hitelesítés (JWT Auth), **BCrypt iparági jelszó-hashelés**, Teljes Regisztrációs felület (UI) és Adat-export (iCal Naptár szinkronizáció, CSV Excel).
 - [x] Sprint 9: Vállalati szintű biztonság (Rate Limiting, Refresh Tokenek, Jelszó komplexitás, HSTS).
 - [x] Sprint 10: Zero-Trust Networking (Cloudflare Tunnel) élesítési tervek.
+- [x] Sprint 11: Timeout védett CSP Algoritmus, Heurisztikus (Mohó/Greedy) vészhelyzeti fall-back bevezetése a szerverfagyás elkerülésére, és Szigorú Munkakör (Pozíció) ellenőrzés a Backtrackerben.
+- [x] Sprint 12: Interaktív, Drag-and-Drop alapú Puzzle Beosztás-szerkesztő a HR számára (@hello-pangea/dnd), illetve Dolgozói Szabadságigénylő felület (Éves keret-indikátorral) integrálása a normál felhasználók számára.
 
 ---
 
 ## 🔮 Jövőbeli Tervek (Továbbfejlesztési Lehetőségek)
 
-A jelenlegi robusztus alapon túl a következő funkciók bevezetését tervezzük:
+A jelenlegi robusztus, "Hard Constraint" alapú rendszeren túl a következő iparági funkciók bevezetését tervezzük a **Soft Constraints (Preferenciák) és Optimalizációs AI** területén:
 
-1. **Valós Idejű Értesítések (SignalR)**: A React kliensek automatikus push notifikációt kapnak, ha a HR egy új beosztást véglegesít, manuális frissítés nélkül.
-2. **Mesterséges Intelligencia (AI) Integráció**: Prediktív ML.NET modellek bevonása, ami előre megmondja az optimális heti szükséges létszámot történelmi forgalmi adatok és ünnepek alapján. Valamint egy LLM (Nyelvi Modell) "Asszisztens" gomb beépítése a dolgozóknak, aki természetes nyelven tudja megmondani a beosztásokat ("Mikor dolgozom jövő héten?").
-3. **Kompetenciamátrix (Skills Matrix)**: A dolgozókhoz speciális tudás (pl. *Targoncás*, *Idegennyelv*) rendelése, amit az NP-nehéz algoritmus "Hard Constraint"-ként kezel. Ezen felül "Soft Constraints" (személyes preferenciák) figyelembevétele a beosztás generálása során az elégedettség növeléséért.
+1. **"Soft Constraints" és Dolgozói Preferenciák Bevezetése**: A jelenlegi rendszer az első érvényes szabad helyre teszi a dolgozót. A jövőben a dolgozók megadhatnák, hogy *preferálják* a reggeli műszakot, vagy *kerülnék* a hétvégéket. Az algoritmust kibővítjük egy **Pontozásos (Scoring) AI** logikával, ahol a cél a "Dolgozói Elégedettség" (Happiness Index) maximalizálása lesz (pl. preferált műszak +10 pont, nem szeretett műszak -5 pont).
+2. **Kötelező Minimum Munkaóra és Éves Szabadság Keret (Dátum-alapon)**: Jelenleg csak a `MaxHetiOra` kerül ellenőrzésre. A jövőben bevezetjük a teljes munkaidősök *Minimum elvárt óraszámát*, amit az algoritmus prioritásként kezel. Illetve a heti sablon-alapú szabadságigénylést átalakítjuk konkrét naptári napok (YYYY-MM-DD) alapú, valódi 20/25 napos levonásos rendszerré.
+3. **Valós Idejű Értesítések (SignalR)**: A React kliensek automatikus push notifikációt kapnak, ha a HR egy új beosztást véglegesít, manuális frissítés nélkül.
+4. **Prediktív ML.NET Integráció**: Prediktív MI modellek bevonása, ami előre megmondja az optimális heti szükséges létszámot történelmi forgalmi adatok és ünnepek alapján.
 
 ---
 

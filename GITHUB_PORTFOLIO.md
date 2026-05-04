@@ -37,9 +37,15 @@ A *Smart Shift Scheduler* egy komplex webalkalmazás, amely megoldást nyújt a 
 - **TDD és xUnit:** A projekt `xUnit` alapú egységtesztekkel (Unit Tests) és integrációs tesztekkel rendelkezik. A Service logika tesztelhetősége érdekében a Firestore hívásokat is sikerült absztrahálni.
 
 ## 💡 Legnagyobb Szakmai Kihívások és Megoldásuk
-1. **Az Ütemezés NP-Nehéz Jellege:** Ahogy nőtt a dolgozók száma, az egyszerű Brute Force algoritmus leállt. *Megoldás:* Egy optimalizált Backtracking (CSP) algoritmust írtam, amit kiegészítettem egy "Least Utilized Worker" (legkevésbé beosztott dolgozó) heurisztikával. Ez nemcsak exponenciálisan gyorsította a futást, de garantálta a fair munkaelosztást is.
-2. **Aszinkron Állapotkezelés a Reactban:** A tokenek lejárati idejének és a jogosultságok azonnali UI-frissülésének kezelése. *Megoldás:* Globális `AuthContext` használata `localStorage` szinkronizációval és feltételes rendereléssel.
-3. **NoSQL Adatmodellezés:** Relációs struktúrák (pl. dolgozó -> műszak kapcsolat) leképezése Firestore-ba. *Megoldás:* A `BeosztasReszlet` dokumentumok denormalizációjával optimalizáltam a naptár-nézet betöltési idejét.
+1. **Az Ütemezés NP-Nehéz Jellege és Szerver Fagyás:** Ahogy nőtt a dolgozók száma, az egyszerű Brute Force algoritmus (vagy egy rossz peremfeltétel, pl. túl kevés ember) könnyen végtelen ciklusba taszította a felhős szervert. *Megoldás:* Egy optimalizált Backtracking (CSP) algoritmust írtam, amit kiegészítettem egy `CancellationToken` alapú **5 másodperces Timeout** mechanizmussal és egy **Heurisztikus (Greedy) Fallback** algoritmussal. Így ha a tökéletes megoldás matematikailag lehetetlen, a szerver fagyás helyett kiadja a "lehető legjobb" részleges eredményt.
+2. **Interaktív Emberi Felülbírálat (HR Override):** A mesterséges intelligencia által generált beosztás sokszor finomhangolást igényel. *Megoldás:* Bevezettem egy modern, React alapú **Drag-and-Drop ("Húzd-és-Ejtsd") Puzzle** felületet (`@hello-pangea/dnd`), ahol a HR-esek vizuálisan, kártyákat húzogatva módosíthatják a beosztást, majd ezt egy dedikált API végponton keresztül szinkronizálhatják az adatbázissal.
+3. **Aszinkron Állapotkezelés a Reactban:** A tokenek lejárati idejének és a jogosultságok azonnali UI-frissülésének kezelése. *Megoldás:* Globális `AuthContext` használata `localStorage` szinkronizációval és szerepkör-alapú rendereléssel (pl. a normál dolgozó csak a saját "Szabadságigénylőjét" látja éves vizuális kvótával).
+
+## 🔮 Továbbfejlesztési Roadmap (Future Scope)
+Bár a projekt egy teljes értékű "Hard Constraint" (kizáró okok) alapján működő rendszer, a következő iparági sztenderdek bevezetése adja a szoftver jövőbeli potenciálját:
+- **Soft Constraints (Preferenciák) és Pontozásos (Scoring) MI:** Az algoritmus átállítása egy olyan MI modellre, ami nemcsak betölti a helyeket, hanem maximalizálja az "Elégedettségi indexet" (pl. preferált reggeli műszak +10 pont).
+- **Szerződéses Minimum Munkaóra és Éves Naptári Szabadság:** A `MaxHetiOra` mellett a kötelező munkaórák kikényszerítése, illetve a heti "Elérhetőség" sablonok leváltása konkrét Dátum (YYYY-MM-DD) alapú, valódi éves szabadság-levonásos rendszerre.
+- **Valós idejű kommunikáció:** SignalR alapú push-értesítések a dolgozóknak, amikor a HR véglegesíti a beosztásukat.
 
 ## 🏁 Összegzés
 A projekt kiválóan demonstrálja, hogyan lehet egy elméleti számítástudományi problémát (CSP beosztás) egy modern, felhő-natív, felhasználóbarát webalkalmazásba csomagolni. A fejlesztés során a Clean Code és az Agilis alapelvek betartása garantálta a fenntartható kódminőséget.

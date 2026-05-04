@@ -274,7 +274,9 @@ namespace MuszakBeosztasAPI.Services
 
             if (snapshot.Documents.Count > 0)
             {
-                return snapshot.Documents[0].ConvertTo<Beosztas>();
+                var beosztas = snapshot.Documents[0].ConvertTo<Beosztas>();
+                beosztas.Id = snapshot.Documents[0].Id;
+                return beosztas;
             }
 
             return null;

@@ -7,6 +7,7 @@ namespace MuszakBeosztasAPI.Models
     public class Beosztas
     {
         // A Firestore dokumentum azonosítója
+        [FirestoreDocumentId]
         public string? Id { get; set; }
 
         [FirestoreProperty]

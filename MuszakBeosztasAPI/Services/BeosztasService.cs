@@ -56,8 +56,8 @@ namespace MuszakBeosztasAPI.Services
             var beosztasLista = new List<BeosztasReszlet>();
             var hetiOrakDolgozonkent = dolgozok.ToDictionary(d => d.Id, d => 0);
 
-            // 5 másodperces Biztonsági fék (Timeout)
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            // 30 másodperces Biztonsági fék (Timeout) – bőven elég egy éttermi heti beosztás megoldásához
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
             bool Sikerult = false;
             try 

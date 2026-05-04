@@ -155,6 +155,22 @@ function BeosztasNezet({ dolgozok, muszakok }) {
       }));
   }, [dolgozok, localReszletek, muszakok]);
 
+  const kapacitasInfo = useMemo(() => {
+    if (!isHR) return null;
+    const szuksegesOra = muszakok.reduce((acc, m) => acc + (muszakOrak(m) * m.szuksegesLetszam), 0);
+    const elerhetoOra = dolgozok.filter(d => d.szerepkor !== "HR").reduce((acc, d) => acc + (d.maxHetiOra || 40), 0);
+    const szuksegesSlots = muszakok.reduce((acc, m) => acc + m.szuksegesLetszam, 0);
+    const filledSlots = localReszletek.length;
+    
+    return {
+      szuksegesOra,
+      elerhetoOra,
+      hianyOra: szuksegesOra - elerhetoOra,
+      uresSlotok: szuksegesSlots - filledSlots,
+      tultermeles: elerhetoOra > szuksegesOra * 1.3
+    };
+  }, [muszakok, dolgozok, localReszletek, isHR]);
+
   const rendezettKvota = useMemo(() => {
     const arr = [...kvotaAdatok];
     if (kvotaSortBy === "nev") arr.sort((a, b) => a.nev.localeCompare(b.nev, "hu"));
@@ -237,9 +253,50 @@ function BeosztasNezet({ dolgozok, muszakok }) {
   return (
     <div className="beosztas-container">
       <div className="beosztas-fejlec">
-        <h2>📊 Heti Beosztás {isHR && <span className="hr-badge">Szerkesztő Mód</span>}</h2>
-        <HetValaszto het={het} hetValtozas={setHet} />
+        <div>
+          <h2>📅 Heti Beosztás Tervező</h2>
+          <p className="het-ertek">{het}</p>
+        </div>
+
+        {isHR && kapacitasInfo && (
+          <div className="kapacitas-panel" style={{
+            padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0',
+            backgroundColor: '#fff', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', display: 'flex', gap: '20px'
+          }}>
+            <div style={{textAlign:'center'}}>
+              <div style={{fontSize:'0.7rem', color:'#64748b', fontWeight:'700'}}>LEFEDETTSÉG</div>
+              <div style={{fontSize:'1.2rem', fontWeight:'800', color: kapacitasInfo.uresSlotok > 0 ? '#ef4444' : '#10b981'}}>
+                {kapacitasInfo.uresSlotok === 0 ? '✅ 100%' : `⚠️ ${kapacitasInfo.uresSlotok} üres hely`}
+              </div>
+            </div>
+            <div style={{borderLeft:'1px solid #eee', paddingLeft:'20px'}}>
+              <div style={{fontSize:'0.7rem', color:'#64748b', fontWeight:'700'}}>MUNKAERŐ IGÉNY</div>
+              <div style={{fontSize:'1.1rem', fontWeight:'700'}}>
+                {kapacitasInfo.hianyOra > 0 ? (
+                  <span style={{color:'#ef4444'}}>🛑 Hiány: {kapacitasInfo.hianyOra} óra</span>
+                ) : kapacitasInfo.tultermeles ? (
+                  <span style={{color:'#f59e0b'}}>📢 Túl sok dolgozó</span>
+                ) : (
+                  <span style={{color:'#10b981'}}>💎 Optimális</span>
+                )}
+              </div>
+              <div style={{fontSize:'0.7rem', color:'#94a3b8'}}>{kapacitasInfo.szuksegesOra}h szükséges / {kapacitasInfo.elerhetoOra}h kapacitás</div>
+            </div>
+            {kapacitasInfo.hianyOra > 0 && (
+              <div style={{display:'flex', alignItems:'center', color:'#ef4444', fontSize:'0.8rem', maxWidth:'150px', fontWeight:'600'}}>
+                Javaslat: Vegyen fel +{Math.ceil(kapacitasInfo.hianyOra / 40)} embert!
+              </div>
+            )}
+            {kapacitasInfo.tultermeles && (
+              <div style={{display:'flex', alignItems:'center', color:'#f59e0b', fontSize:'0.8rem', maxWidth:'150px', fontWeight:'600'}}>
+                Javaslat: Csökkentse a létszámot vagy a műszakokat!
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="beosztas-gombok">
+          <HetValaszto het={het} hetValtozas={setHet} />
           {beosztas && (
             <>
               <button className="btn-secondary" onClick={handleExportCSV}>📊 CSV</button>

@@ -8,6 +8,7 @@ function MuszakForm({ mentesKezelo }) {
   const [nap, setNap] = useState("Hétfő");
   const [szuksegesLetszam, setSzuksegesLetszam] = useState(1);
   const [pozicio, setPozicio] = useState("Vegyes");
+  const [egyediPozicio, setEgyediPozicio] = useState("");
   const [hibaUzenet, setHibaUzenet] = useState("");
 
   const napok = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
@@ -27,8 +28,13 @@ function MuszakForm({ mentesKezelo }) {
       befejezes,
       nap,
       szuksegesLetszam: parseInt(szuksegesLetszam) || 1,
-      pozicio: pozicio
+      pozicio: pozicio === "Custom" ? egyediPozicio.trim() : pozicio
     };
+
+    if (pozicio === "Custom" && !egyediPozicio.trim()) {
+      setHibaUzenet("Kérlek add meg az egyedi pozíció nevet!");
+      return;
+    }
 
     try {
       await mentesKezelo(ujMuszak);
@@ -63,8 +69,17 @@ function MuszakForm({ mentesKezelo }) {
               <option value="Pultos">🍸 Pultos</option>
               <option value="Konyhai kisegítő">🧼 Konyhai kisegítő</option>
               <option value="Vegyes">🔄 Vegyes / Általános</option>
+              <option value="Custom">➕ Egyedi...</option>
             </select>
           </div>
+          {pozicio === "Custom" && (
+            <div className="form-mezo" style={{animation: 'fadeIn 0.3s ease'}}>
+              <label htmlFor="egyediPozicio">Egyedi pozíció neve</label>
+              <input id="egyediPozicio" type="text" value={egyediPozicio} 
+                onChange={(e) => setEgyediPozicio(e.target.value)}
+                placeholder="Pl. Biztonsági őr" />
+            </div>
+          )}
         </div>
         <div className="form-sor">
           <div className="form-mezo">

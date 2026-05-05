@@ -195,14 +195,14 @@ namespace MuszakBeosztasAPI.Controllers
 
     public class LoginDto
     {
-        public string Identifier { get; set; } // Nev vagy ID
-        public string Jelszo { get; set; }
+        public string Identifier { get; set; } = null!; // Nev vagy ID
+        public string Jelszo { get; set; } = null!;
     }
 
     public class RegisterDto
     {
-        public string Nev { get; set; }
-        public string Jelszo { get; set; }
+        public string Nev { get; set; } = null!;
+        public string Jelszo { get; set; } = null!;
         public string? Szerepkor { get; set; } // HR vagy Dolgozo (már nem kérjük be, default lesz)
         public string? Pozicio { get; set; }
         public string? Email { get; set; }
@@ -210,7 +210,7 @@ namespace MuszakBeosztasAPI.Controllers
 
     public class RefreshTokenDto
     {
-        public string UserId { get; set; }
-        public string RefreshToken { get; set; }
+        public string UserId { get; set; } = null!;
+        public string RefreshToken { get; set; } = null!;
     }
 }

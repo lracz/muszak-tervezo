@@ -101,49 +101,9 @@ namespace MuszakBeosztasAPI.Services
             List<(Muszak muszak, string nap)> slotok, 
             List<Dolgozo> dolgozok, 
             List<Elerhetoseg> elerhetosegek, 
+            List<Szabadsag> szabadsagok, 
+            string het,
             Dictionary<string, int> hetiOrak, 
-            List<BeosztasReszlet> jelenlegiBeosztas,
-            CancellationToken cancellationToken)
-        {
-            // Kilépés, ha lejárt a beállított Timeout
-            if (cancellationToken.IsCancellationRequested)
-                return false;
-
-            // Ha az összes slot be van töltve, megvan a megoldás!
-            if (slotIndex >= slotok.Count)
-                return true;
-
-            var napok = new[] { "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap" };
-            var aktualisSlot = slotok[slotIndex];
-            var aktualisMuszak = aktualisSlot.muszak;
-            
-            // HEURISZTIKA: Pontozzuk a dolgozókat több szempont szerint
-            var rendezettDolgozok = dolgozok.Select(d => {
-                int score = 0;
-
-                // 1. Preferált napszak (+1000 pont)
-                bool preferaltMatch = !string.IsNullOrEmpty(d.PreferaltNapszak) && 
-                                     aktualisMuszak.Megnevezes.Contains(d.PreferaltNapszak, StringComparison.OrdinalIgnoreCase);
-                if (preferaltMatch) score += 1000;
-
-                // 2. Rutin / Konzisztencia (+500 pont): Ha a legutóbbi műszakja ezen a héten ugyanilyen típusú volt
-                var utolsoBeosztas = jelenlegiBeosztas.Where(b => b.DolgozoId == d.Id)
-                                                     .OrderByDescending(b => napok.ToList().IndexOf(b.Nap))
-                                                     .FirstOrDefault();
-                if (utolsoBeosztas != null && utolsoBeosztas.MuszakId == aktualisMuszak.Id)
-                {
-                    score += 500;
-                }
-
-                // 3. Kvóta hátralék (+10 pont / óra): Minél messzebb van a heti kerettől, annál sürgetőbb beosztani
-                int hatralevOrak = d.MaxHetiOra - hetiOrak[d.Id];
-                score += (hatralevOrak * 10);
-
-                // 4. Folytonosság (+200 pont): Ha tegnap is dolgozott, preferáljuk a blokkosítást a lyukakkal szemben
-                int maIndex = napok.ToList().IndexOf(aktualisSlot.nap);
-                if (maIndex > 0) {
-                    string tegnap = napok[maIndex - 1];
-                    if (jelenlegiBeosztas.Any(b => b.DolgozoId == d.Id && b.Nap == tegnap)) {
             List<BeosztasReszlet> beosztas, 
             CancellationToken ct)
         {
@@ -153,11 +113,17 @@ namespace MuszakBeosztasAPI.Services
             var slot = slotok[slotIndex];
             var aktualisMuszak = slot.muszak;
 
+            // HEURISZTIKA: Dolgozók sorrendbe állítása (Preferált napszak és hátralévő órák alapján)
             var rendezettDolgozok = dolgozok
                 .OrderByDescending(d => 
-                    !string.IsNullOrEmpty(d.PreferaltNapszak) && aktualisMuszak.Megnevezes.Contains(d.PreferaltNapszak, StringComparison.OrdinalIgnoreCase) ? 1 : 0
-                )
-                .ThenBy(d => hetiOrak[d.Id]).ToList();
+                {
+                    int score = 0;
+                    if (!string.IsNullOrEmpty(d.PreferaltNapszak) && aktualisMuszak.Megnevezes.Contains(d.PreferaltNapszak, StringComparison.OrdinalIgnoreCase)) 
+                        score += 1000;
+                    score += (d.MaxHetiOra - hetiOrak[d.Id]) * 10;
+                    return score;
+                })
+                .ToList();
 
             foreach (var dolgozo in rendezettDolgozok)
             {

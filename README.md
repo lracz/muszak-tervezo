@@ -330,10 +330,13 @@ A részletes dokumentáció a `docs/` mappában található:
 | Dokumentum | Leírás |
 |---|---|
 | [Architektúra](docs/architektura.md) | Rendszer architektúra, rétegek, API végpontok |
-| [Fejlesztési módszertan](docs/fejlesztesi-modszertan.md) | Agilis/Scrum, összehasonlítás más módszertanokkal |
+| [Fejlesztési módszertan](docs/fejlesztesi-modszertan.md) | Agilis/Scrum, VCS/SCM verziókezelés |
 | [Munkanapló](docs/munkanaplo.md) | Sprint-alapú fejlesztési napló |
 | [Team szervezés](docs/team-szervezes.md) | Csapat felépítés, szerepkörök |
 | [Tesztelési stratégia](docs/tesztelesi-strategia.md) | Egységtesztek, integrációs tesztek |
+| [Teljesítmény és Hibakezelés](docs/teljesitmeny-es-hibakezeles.md) | API optimalizáció, Exception handling, Rate Limiting |
+| [Felhasználói Kézikönyv](docs/felhasznaloi-kezikonyv.md) | Használati útmutató Dolgozók és HR számára |
+| [Utánkövetés és Visszajelzés](docs/utankovetes.md) | Felhasználói visszajelzések kezelése és javítási stratégia |
 
 ---
 

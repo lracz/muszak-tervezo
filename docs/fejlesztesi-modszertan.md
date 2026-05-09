@@ -107,7 +107,9 @@ Egy feature akkor tekinthető késznek, ha:
 
 ---
 
-## 4. Verziókezelési stratégia
+## 4. Verziókezelési stratégia (VCS / SCM)
+
+A projekt forráskódjának kezeléséhez elosztott verziókezelő rendszert (**VCS** - Version Control System), konkrétan a **Git**-et használjuk. A forráskód menedzsmentjét (**SCM** - Source Code Management) a **GitHub** felületén végezzük, amely biztosítja a folyamatos integráció (CI) és kód áttekintés (Code Review) lehetőségeit.
 
 ### Branch modell
 

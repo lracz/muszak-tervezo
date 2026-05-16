@@ -50,6 +50,12 @@ body {
   padding: 40px 20px;
 }
 
+@media (max-width: 768px) {
+  .app {
+    padding: 20px 10px;
+  }
+}
+
 /* === Glassmorphism & Micro-animations === */
 .glass {
   background: var(--card-bg);
@@ -83,12 +89,28 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+@media (max-width: 768px) {
+  .fejlec {
+    flex-direction: column;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 20px;
+    gap: 20px;
+  }
+}
+
 .fejlec h1 {
   font-size: 2.5rem;
   margin-bottom: 5px;
   font-weight: 900;
   letter-spacing: -1.5px;
   text-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 480px) {
+  .fejlec h1 {
+    font-size: 1.8rem;
+  }
 }
 
 .header-actions {
@@ -619,10 +641,41 @@ h2 {
 @media (max-width: 768px) {
   .form-sor { flex-direction: column; gap: 0; }
   .beosztas-fejlec { flex-direction: column; align-items: stretch; }
-  .beosztas-gombok { justify-content: stretch; }
-  .btn-general, .btn-veglegesit { flex: 1; }
+  .beosztas-gombok { justify-content: stretch; padding: 10px; }
+  .btn-general, .btn-veglegesit { flex: 1; padding: 10px; font-size: 0.8rem; }
   .tab-nav { padding-bottom: 5px; }
-  .tab-gomb { padding: 10px; font-size: 0.9rem; }
+  .tab-gomb { padding: 10px; font-size: 0.8rem; }
+  
+  /* Table Responsiveness */
+  .dolgozo-tabla-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -10px;
+    padding: 0 10px;
+  }
+  
+  .dolgozo-tabla {
+    min-width: 600px; /* Force scroll */
+  }
+  
+  .nap-header {
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-general-large {
+    font-size: 1rem;
+    padding: 15px;
+  }
+  
+  .stat-card {
+    padding: 15px;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
 }
 
 /* === Modern Custom DatePicker === */
@@ -672,6 +725,26 @@ h2 {
   z-index: 1000;
   padding: 20px;
   border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 480px) {
+  .calendar-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 350px;
+  }
+  
+  .animate-in {
+    animation: calendarPopMobile 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+}
+
+@keyframes calendarPopMobile {
+  from { opacity: 0; transform: translate(-50%, -40%) scale(0.9); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 .animate-in {
